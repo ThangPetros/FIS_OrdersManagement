@@ -11,6 +11,7 @@ using SampleProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Thinktecture;
 using TrueSight.Common;
@@ -51,7 +52,14 @@ namespace SampleProject
                 DataContext DataContext = new DataContext(optionsBuilder.Options);
                 return DataContext;
             };
-        }
+                  /*Assembly[] assemblies = new[] { Assembly.GetAssembly(typeof(IServiceScoped)),
+                Assembly.GetAssembly(typeof(Startup)) };
+                  services.Scan(scan => scan
+                      .FromAssemblies(assemblies)
+                      .AddClasses(classes => classes.AssignableTo<IServiceScoped>())
+                           .AsImplementedInterfaces()
+                           .WithScopedLifetime());*/
+            }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -35,7 +35,7 @@ namespace SampleProject.Entities
 		public StringFilter Code { get; set; }
 		public DateFilter OrderDate { get; set; }
 		public IdFilter CustomerId { get; set; }
-		public StringFilter Total { get; set; }
+		public DecimalFilter Total { get; set; }
 		public DateFilter UpdateTime { get; set; }
 		public List<OrderServiceFilter> OrFilter { get; set; }
 		public OrderServiceOrder OrderBy { get; set; }

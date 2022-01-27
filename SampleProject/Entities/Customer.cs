@@ -21,7 +21,7 @@ namespace SampleProject.Entities
             public DateTime? DeletedAt { get; set; }
             public bool Used { get; set; }
 
-            public Status status { get; set; }
+            public Status Status { get; set; }
 
             public bool Equals(Customer other)
 		{

@@ -40,10 +40,10 @@ namespace SampleProject.Entities
 		public IdFilter OrderServiceId { get; set; }
 		public IdFilter UnitOfMeasureId { get; set; }
 		public IdFilter PrimaryUnitOfMeasureId { get; set; }
-		public StringFilter Quantity { get; set; }
-		public StringFilter RequestQuantity { get; set; }
-		public StringFilter Price { get; set; }
-		public StringFilter Amount { get; set; }
+		public LongFilter Quantity { get; set; }
+		public LongFilter RequestQuantity { get; set; }
+		public DecimalFilter Price { get; set; }
+		public DecimalFilter Amount { get; set; }
 		public List<OrderServiceContentFilter> OrFilter { get; set; }
 		public OrderServiceContentOrder OrderBy { get; set; }
 		public OrderServiceContentSelect Selects { get; set; }

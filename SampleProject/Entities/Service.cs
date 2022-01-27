@@ -37,7 +37,7 @@ namespace SampleProject.Entities
 		public StringFilter Code { get; set; }
 		public StringFilter Name { get; set; }
 		public IdFilter UnitOfMeasureId { get; set; }
-		public StringFilter Price { get; set; }
+		public DecimalFilter Price { get; set; }
 		public IdFilter StatusId { get; set; }
 		public DateFilter UpdateTime { get; set; }
 		public List<Service> OrFilter { get; set; }
