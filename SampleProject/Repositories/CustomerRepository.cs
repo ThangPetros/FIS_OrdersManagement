@@ -124,7 +124,7 @@ namespace SampleProject.Repositories
 		}
 		private async Task<List<Customer>> DynamicSelect(IQueryable<CustomerDAO> query, CustomerFilter filter)
 		{
-			List<Customer> Brands = await query.Select(q => new Customer()
+			List<Customer> Customers = await query.Select(q => new Customer()
 			{
 				Id = filter.Selects.Contains(CustomerSelect.Id) ? q.Id : default(long),
 				Code = filter.Selects.Contains(CustomerSelect.Code) ? q.Code : default(string),
@@ -142,7 +142,7 @@ namespace SampleProject.Repositories
 				UpdatedAt = q.UpdatedAt,
 				DeletedAt = q.DeletedAt,
 			}).ToListAsync();
-			return Brands;
+			return Customers;
 		}
 		public async Task<int> Count(CustomerFilter filter)
 		{

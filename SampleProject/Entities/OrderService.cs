@@ -47,8 +47,9 @@ namespace SampleProject.Entities
 		Id = 0,
 		Code = 1,
 		OrderDate = 2,
-		Total = 3,
-		UpdateAt = 4
+		Customer = 3,
+		Total = 4,
+		UpdateAt = 5
 	}
 	[Flags]
 	public enum OrderServiceSelect : long
@@ -57,6 +58,7 @@ namespace SampleProject.Entities
 		Id = E._0,
 		Code = E._1,
 		OrderDate = E._2,
-		Total = E._3,
+		Customer = E._3,
+		Total = E._4,
 	}
 }
