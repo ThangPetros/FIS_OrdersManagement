@@ -216,7 +216,7 @@ namespace SampleProject.Repositories
 			await DataContext.OrderService.Where(x => x.Id == OrderService.Id).UpdateFromQueryAsync(x => new OrderServiceDAO { DeleteAt = DateTime.Now });
 			return true;
 		}
-		public async Task<bool> BulkDelete(List<OrderService> OrderServices)
+		public async Task<bool> BulkMerge(List<OrderService> OrderServices)
 		{
 			List<OrderServiceDAO> OrderServiceDAOs = new List<OrderServiceDAO>();
 			foreach (OrderService OrderService in OrderServices)
@@ -234,7 +234,7 @@ namespace SampleProject.Repositories
 			await DataContext.BulkMergeAsync(OrderServiceDAOs);
 			return true;
 		}
-		public async Task<bool> BulkMerge(List<OrderService> OrderServices)
+		public async Task<bool> BulkDelete(List<OrderService> OrderServices)
 		{
 			List<long> Ids = OrderServices.Select(x => x.Id).ToList();
 			await DataContext.OrderService

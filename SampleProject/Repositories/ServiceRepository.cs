@@ -254,7 +254,7 @@ namespace SampleProject.Repositories
 			await DataContext.Service.Where(x => x.Id == Service.Id).UpdateFromQueryAsync(x => new ServiceDAO { DeleteAt = DateTime.Now });
 			return true;
 		}
-		public async Task<bool> BulkDelete(List<Service> Services)
+		public async Task<bool> BulkMerge(List<Service> Services)
 		{
 			List<ServiceDAO> ServiceDAOs = new List<ServiceDAO>();
 			foreach (Service Service in Services)
@@ -273,7 +273,7 @@ namespace SampleProject.Repositories
 			await DataContext.BulkMergeAsync(ServiceDAOs);
 			return true;
 		}
-		public async Task<bool> BulkMerge(List<Service> Services)
+		public async Task<bool> BulkDelete(List<Service> Services)
 		{
 			List<long> Ids = Services.Select(x => x.Id).ToList();
 			await DataContext.Service

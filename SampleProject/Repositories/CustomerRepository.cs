@@ -250,7 +250,7 @@ namespace SampleProject.Repositories
 			await DataContext.Customer.Where(x => x.Id == Customer.Id).UpdateFromQueryAsync(x => new CustomerDAO { DeleteAt = DateTime.Now });
 			return true;
 		}
-		public async Task<bool> BulkDelete(List<Customer> Customers)
+		public async Task<bool> BulkMerge(List<Customer> Customers)
 		{
 			List<CustomerDAO> CustomerDAOs = new List<CustomerDAO>();
 			foreach (Customer Customer in Customers)
@@ -267,12 +267,14 @@ namespace SampleProject.Repositories
 			await DataContext.BulkMergeAsync(CustomerDAOs);
 			return true;
 		}
-		public async Task<bool> BulkMerge(List<Customer> Customers)
+		public async Task<bool> BulkDelete(List<Customer> Customers)
 		{
 			List<long> Ids = Customers.Select(x => x.Id).ToList();
+			/*await DataContext.Customer
+				.Where(x => Ids.Contains(x.Id)).UpdateFromQueryAsync(x => new CustomerDAO { StatusId = 2 });*/
 			await DataContext.Customer
-			    .Where(x => Ids.Contains(x.Id))
-			    .UpdateFromQueryAsync(x => new CustomerDAO { DeleteAt = DateTime.Now });
+				.Where(x => Ids.Contains(x.Id))
+				.UpdateFromQueryAsync(x => new CustomerDAO { DeleteAt = DateTime.Now });
 			return true;
 		}
 		public async Task<bool> Used(List<long> Ids)

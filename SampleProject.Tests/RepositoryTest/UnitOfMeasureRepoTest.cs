@@ -8,12 +8,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using SampleProject.Models;
 using NUnit.Framework;
-/*using Microsoft.VisualStudio.TestTools.UnitTesting;*/
 
 
 namespace SampleProject.Tests
 {
-	//[TestClass]
 	[TestFixture]
 	public class UnitOfMeasureRepoTest : CommonTests
 	{
@@ -22,7 +20,6 @@ namespace SampleProject.Tests
 		{
 
 		}
-		//[TestMethod]
 		[SetUp]
 		public async Task Setup()
 		{
