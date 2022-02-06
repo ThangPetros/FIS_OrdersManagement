@@ -34,7 +34,7 @@ namespace SampleProject.Repositories
         {
             if (filter == null)
                 return query.Where(q => false);
-            query = query.Where(q => !q.DeletedAt.HasValue);
+            query = query.Where(q => !q.DeleteAt.HasValue);
             query = query.Where(q => q.Id, filter.Id);
             query = query.Where(q => q.Code, filter.Code);
             query = query.Where(q => q.Name, filter.Name);
@@ -171,7 +171,7 @@ namespace SampleProject.Repositories
                 Used = x.Used,
                 CreatedAt = x.CreatedAt,
                 UpdatedAt = x.UpdatedAt,
-                DeletedAt = x.DeletedAt,
+                DeleteAt = x.DeleteAt,
                 Status = x.Status == null ? null : new Status
                 {
                     Id = x.Status.Id,
@@ -193,7 +193,7 @@ namespace SampleProject.Repositories
                 Used = x.Used,
                 CreatedAt = x.CreatedAt,
                 UpdatedAt = x.UpdatedAt,
-                DeletedAt = x.DeletedAt,
+                DeleteAt = x.DeleteAt,
                 Status = x.Status == null ? null : new Status
                 {
                     Id = x.Status.Id,
@@ -241,7 +241,7 @@ namespace SampleProject.Repositories
 
         public async Task<bool> Delete(UnitOfMeasure UnitOfMeasure)
         {
-            await DataContext.UnitOfMeasure.Where(x => x.Id == UnitOfMeasure.Id).UpdateFromQueryAsync(x => new UnitOfMeasureDAO { DeletedAt = DateTime.Now });
+            await DataContext.UnitOfMeasure.Where(x => x.Id == UnitOfMeasure.Id).UpdateFromQueryAsync(x => new UnitOfMeasureDAO { DeleteAt = DateTime.Now });
             return true;
         }
 
@@ -268,7 +268,7 @@ namespace SampleProject.Repositories
             List<long> Ids = UnitOfMeasures.Select(x => x.Id).ToList();
             await DataContext.UnitOfMeasure
                 .Where(x => Ids.Contains(x.Id))
-                .UpdateFromQueryAsync(x => new UnitOfMeasureDAO { DeletedAt = DateTime.Now });
+                .UpdateFromQueryAsync(x => new UnitOfMeasureDAO { DeleteAt = DateTime.Now });
             return true;
         }
 

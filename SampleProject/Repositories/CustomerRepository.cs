@@ -35,7 +35,7 @@ namespace SampleProject.Repositories
 		{
 			if (filter == null)
 				return query.Where(q => false);
-			query = query.Where(q => !q.DeletedAt.HasValue);
+			query = query.Where(q => !q.DeleteAt.HasValue);
 			query = query.Where(q => q.Id, filter.Id);
 			query = query.Where(q => q.Code, filter.Code);
 			query = query.Where(q => q.Name, filter.Name);
@@ -140,7 +140,7 @@ namespace SampleProject.Repositories
 				Used = q.Used,
 				CreatedAt = q.CreatedAt,
 				UpdatedAt = q.UpdatedAt,
-				DeletedAt = q.DeletedAt,
+				DeleteAt = q.DeleteAt,
 			}).ToListAsync();
 			return Customers;
 		}
@@ -168,7 +168,7 @@ namespace SampleProject.Repositories
 		{
 			CreatedAt = x.CreatedAt,
 			UpdatedAt = x.UpdatedAt,
-			DeletedAt = x.DeletedAt,
+			DeleteAt = x.DeleteAt,
 			Id = x.Id,
 			Code = x.Code,
 			Name = x.Name,
@@ -198,7 +198,7 @@ namespace SampleProject.Repositories
 			    Used = x.Used,
 			    CreatedAt = x.CreatedAt,
 			    UpdatedAt = x.UpdatedAt,
-			    DeletedAt = x.DeletedAt,
+			    DeleteAt = x.DeleteAt,
 			    Status = x.Status == null ? null : new Status
 			    {
 				    Id = x.Status.Id,
@@ -247,7 +247,7 @@ namespace SampleProject.Repositories
 		}
 		public async Task<bool> Delete(Customer Customer)
 		{
-			await DataContext.Customer.Where(x => x.Id == Customer.Id).UpdateFromQueryAsync(x => new CustomerDAO { DeletedAt = DateTime.Now });
+			await DataContext.Customer.Where(x => x.Id == Customer.Id).UpdateFromQueryAsync(x => new CustomerDAO { DeleteAt = DateTime.Now });
 			return true;
 		}
 		public async Task<bool> BulkDelete(List<Customer> Customers)
@@ -272,7 +272,7 @@ namespace SampleProject.Repositories
 			List<long> Ids = Customers.Select(x => x.Id).ToList();
 			await DataContext.Customer
 			    .Where(x => Ids.Contains(x.Id))
-			    .UpdateFromQueryAsync(x => new CustomerDAO { DeletedAt = DateTime.Now });
+			    .UpdateFromQueryAsync(x => new CustomerDAO { DeleteAt = DateTime.Now });
 			return true;
 		}
 		public async Task<bool> Used(List<long> Ids)

@@ -1,4 +1,4 @@
-﻿using System;using Thinktecture;
+﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -22,7 +22,7 @@ namespace SampleProject.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("data source=127.0.0.1,21138;initial catalog=SampleDB;persist security info=True;user id=sa;password=123@123a;multipleactiveresultsets=True;");
+                optionsBuilder.UseSqlServer("Data Source=ADMIN\\SQLEXPRESS;Initial Catalog=OrdersManagement;Persist Security Info=True;User ID=TaToan;Password=00000;multipleactiveresultsets=True;");
             }
         }
 
@@ -30,15 +30,19 @@ namespace SampleProject.Models
         {
             modelBuilder.Entity<CustomerDAO>(entity =>
             {
-                entity.Property(e => e.Address).HasMaxLength(1000);
+                entity.Property(e => e.Id).ValueGeneratedNever();
 
-                entity.Property(e => e.Code)
+                entity.Property(e => e.Address)
                     .IsRequired()
                     .HasMaxLength(500);
 
+                entity.Property(e => e.Code)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 
-                entity.Property(e => e.DeletedAt).HasColumnType("datetime");
+                entity.Property(e => e.DeleteAt).HasColumnType("datetime");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -54,18 +58,20 @@ namespace SampleProject.Models
                     .WithMany(p => p.Customers)
                     .HasForeignKey(d => d.StatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Customer_Status");
+                    .HasConstraintName("FK_Customer_Status (ENUM)");
             });
 
             modelBuilder.Entity<OrderServiceDAO>(entity =>
             {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
                 entity.Property(e => e.Code)
                     .IsRequired()
-                    .HasMaxLength(500);
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 
-                entity.Property(e => e.DeletedAt).HasColumnType("datetime");
+                entity.Property(e => e.DeleteAt).HasColumnType("datetime");
 
                 entity.Property(e => e.OrderDate).HasColumnType("datetime");
 
@@ -82,21 +88,17 @@ namespace SampleProject.Models
 
             modelBuilder.Entity<OrderServiceContentDAO>(entity =>
             {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
                 entity.Property(e => e.Amount).HasColumnType("decimal(18, 4)");
 
-                entity.Property(e => e.Price).HasColumnType("decimal(18, 4)");
+                entity.Property(e => e.Prive).HasColumnType("decimal(18, 4)");
 
                 entity.HasOne(d => d.OrderService)
                     .WithMany(p => p.OrderServiceContents)
                     .HasForeignKey(d => d.OrderServiceId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderServiceContent_OrderService");
-
-                entity.HasOne(d => d.PrimaryUnitOfMeasure)
-                    .WithMany(p => p.OrderServiceContentPrimaryUnitOfMeasures)
-                    .HasForeignKey(d => d.PrimaryUnitOfMeasureId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrderServiceContent_UnitOfMeasure");
 
                 entity.HasOne(d => d.Service)
                     .WithMany(p => p.OrderServiceContents)
@@ -105,27 +107,29 @@ namespace SampleProject.Models
                     .HasConstraintName("FK_OrderServiceContent_Service");
 
                 entity.HasOne(d => d.UnitOfMeasure)
-                    .WithMany(p => p.OrderServiceContentUnitOfMeasures)
+                    .WithMany(p => p.OrderServiceContents)
                     .HasForeignKey(d => d.UnitOfMeasureId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrderServiceContent_UnitOfMeasure1");
+                    .HasConstraintName("FK_OrderServiceContent_UnitOfMeasure (MDM)");
             });
 
             modelBuilder.Entity<ServiceDAO>(entity =>
             {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
                 entity.Property(e => e.Code)
                     .IsRequired()
-                    .HasMaxLength(500);
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 
-                entity.Property(e => e.DeletedAt).HasColumnType("datetime");
+                entity.Property(e => e.DeleteAt).HasColumnType("datetime");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(500);
 
-                entity.Property(e => e.Price).HasColumnType("decimal(18, 4)");
+                entity.Property(e => e.Prive).HasColumnType("decimal(18, 4)");
 
                 entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
 
@@ -133,13 +137,13 @@ namespace SampleProject.Models
                     .WithMany(p => p.Services)
                     .HasForeignKey(d => d.StatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Service_Status");
+                    .HasConstraintName("FK_Service_Status (ENUM)");
 
                 entity.HasOne(d => d.UnitOfMeasure)
                     .WithMany(p => p.Services)
                     .HasForeignKey(d => d.UnitOfMeasureId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Service_UnitOfMeasure");
+                    .HasConstraintName("FK_Service_UnitOfMeasure (MDM)");
             });
 
             modelBuilder.Entity<StatusDAO>(entity =>
@@ -148,7 +152,7 @@ namespace SampleProject.Models
 
                 entity.Property(e => e.Code)
                     .IsRequired()
-                    .HasMaxLength(500);
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -157,13 +161,15 @@ namespace SampleProject.Models
 
             modelBuilder.Entity<UnitOfMeasureDAO>(entity =>
             {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
                 entity.Property(e => e.Code)
                     .IsRequired()
-                    .HasMaxLength(500);
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 
-                entity.Property(e => e.DeletedAt).HasColumnType("datetime");
+                entity.Property(e => e.DeleteAt).HasColumnType("datetime");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -175,7 +181,7 @@ namespace SampleProject.Models
                     .WithMany(p => p.UnitOfMeasures)
                     .HasForeignKey(d => d.StatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_UnitOfMeasure_Status");
+                    .HasConstraintName("FK_UnitOfMeasure (MDM)_Status (ENUM)");
             });
 
             OnModelCreatingPartial(modelBuilder);

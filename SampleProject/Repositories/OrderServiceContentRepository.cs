@@ -33,7 +33,7 @@ namespace SampleProject.Repositories
 		{
 			if (filter == null)
 				return query.Where(q => false);
-			//query = query.Where(q => !q.DeletedAt.HasValue);
+			//query = query.Where(q => !q.DeleteAt.HasValue);
 			//query = query.Where(q => q.Id, filter.Id);
 			query = query.Where(q => q.ServiceId, filter.ServiceId);
 			query = query.Where(q => q.OrderServiceId, filter.OrderServiceId);
@@ -41,7 +41,7 @@ namespace SampleProject.Repositories
 			query = query.Where(q => q.PrimaryUnitOfMeasureId, filter.PrimaryUnitOfMeasureId);
 			query = query.Where(q => q.Quantity, filter.Quantity);
 			query = query.Where(q => q.RequestQuantity, filter.RequestQuantity);
-			query = query.Where(q => q.Price, filter.Price);
+			query = query.Where(q => q.Prive, filter.Prive);
 			query = query.Where(q => q.Amount, filter.Amount);
 
 			query = OrFilter(query, filter);
@@ -62,7 +62,7 @@ namespace SampleProject.Repositories
 				queryable = queryable.Where(q => q.PrimaryUnitOfMeasureId, filter.PrimaryUnitOfMeasureId);
 				queryable = queryable.Where(q => q.Quantity, filter.Quantity);
 				queryable = queryable.Where(q => q.RequestQuantity, filter.RequestQuantity);
-				queryable = queryable.Where(q => q.Price, filter.Price);
+				queryable = queryable.Where(q => q.Prive, filter.Prive);
 				queryable = queryable.Where(q => q.Amount, filter.Amount);
 				initQuery = initQuery.Union(queryable);
 			}
@@ -90,8 +90,8 @@ namespace SampleProject.Repositories
 						case OrderServiceContentOrder.Quantity:
 							query = query.OrderBy(q => q.Quantity);
 							break;
-						case OrderServiceContentOrder.Price:
-							query = query.OrderBy(q => q.Price);
+						case OrderServiceContentOrder.Prive:
+							query = query.OrderBy(q => q.Prive);
 							break;
 						default:
 							query = query.OrderBy(q => q.Id);
@@ -116,8 +116,8 @@ namespace SampleProject.Repositories
 						case OrderServiceContentOrder.Quantity:
 							query = query.OrderByDescending(q => q.Quantity);
 							break;
-						case OrderServiceContentOrder.Price:
-							query = query.OrderByDescending(q => q.Price);
+						case OrderServiceContentOrder.Prive:
+							query = query.OrderByDescending(q => q.Prive);
 							break;
 						default:
 							query = query.OrderByDescending(q => q.Id);
@@ -138,7 +138,7 @@ namespace SampleProject.Repositories
 				UnitOfMeasureId = filter.Selects.Contains(OrderServiceContentSelect.UnitOfMeasure) ? q.UnitOfMeasureId : default(long),
 				PrimaryUnitOfMeasureId = filter.Selects.Contains(OrderServiceContentSelect.PrimaryUnitOfMeasure) ? q.PrimaryUnitOfMeasureId : default(long),
 				Quantity = filter.Selects.Contains(OrderServiceContentSelect.Quantity) ? q.Quantity : default(long),
-				Price = filter.Selects.Contains(OrderServiceContentSelect.Price) ? q.Price : default(long),
+				Prive = filter.Selects.Contains(OrderServiceContentSelect.Prive) ? q.Prive : default(long),
 				
 			}).ToListAsync();
 			return OrderServiceContents;
@@ -171,7 +171,7 @@ namespace SampleProject.Repositories
 			UnitOfMeasureId = x.UnitOfMeasureId,
 			PrimaryUnitOfMeasureId = x.PrimaryUnitOfMeasureId,
 			Quantity = x.Quantity,
-			Price = x.Price,
+			Prive = x.Prive,
 			RequestQuantity = x.RequestQuantity,
 			Amount = x.Amount
 		}).ToListAsync();
@@ -189,7 +189,7 @@ namespace SampleProject.Repositories
 			    UnitOfMeasureId = x.UnitOfMeasureId,
 			    PrimaryUnitOfMeasureId = x.PrimaryUnitOfMeasureId,
 			    Quantity = x.Quantity,
-			    Price = x.Price,
+			    Prive = x.Prive,
 			    RequestQuantity = x.RequestQuantity,
 			    Amount = x.Amount
 		    }).FirstOrDefaultAsync();

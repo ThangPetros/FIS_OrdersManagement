@@ -17,8 +17,8 @@ namespace SampleProject.Models
         public decimal Total { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public DateTime? DeletedAt { get; set; }
-        public bool? Used { get; set; }
+        public DateTime? DeleteAt { get; set; }
+        public bool Used { get; set; }
 
         public virtual CustomerDAO Customer { get; set; }
         public virtual ICollection<OrderServiceContentDAO> OrderServiceContents { get; set; }

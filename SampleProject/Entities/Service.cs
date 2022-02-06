@@ -14,11 +14,11 @@ namespace SampleProject.Entities
             public string Code { get; set; }
             public string Name { get; set; }
             public long UnitOfMeasureId { get; set; }
-            public decimal Price { get; set; }
+            public decimal Prive { get; set; }
             public long StatusId { get; set; }
             public DateTime CreatedAt { get; set; }
             public DateTime UpdatedAt { get; set; }
-            public DateTime? DeletedAt { get; set; }
+            public DateTime? DeleteAt { get; set; }
             public bool Used { get; set; }
 		public Status Status { get; set; }
 
@@ -37,7 +37,7 @@ namespace SampleProject.Entities
 		public StringFilter Code { get; set; }
 		public StringFilter Name { get; set; }
 		public IdFilter UnitOfMeasureId { get; set; }
-		public DecimalFilter Price { get; set; }
+		public DecimalFilter Prive { get; set; }
 		public IdFilter StatusId { get; set; }
 		public DateFilter UpdateTime { get; set; }
 		public List<ServiceFilter> OrFilter { get; set; }
@@ -51,7 +51,7 @@ namespace SampleProject.Entities
 		Code = 1,
 		Name = 2,
 		UnitOfMeasure = 3,
-		Price = 4,
+		Prive = 4,
 		Status = 5,
 		UpdateAt = 6
 	}
@@ -63,7 +63,7 @@ namespace SampleProject.Entities
 		Code = E._1,
 		Name = E._2,
 		UnitOfMeasure = E._3,
-		Price = E._4,
+		Prive = E._4,
 		Status = E._5
 	}
 }

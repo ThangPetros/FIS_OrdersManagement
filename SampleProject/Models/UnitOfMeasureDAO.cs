@@ -7,8 +7,7 @@ namespace SampleProject.Models
     {
         public UnitOfMeasureDAO()
         {
-            OrderServiceContentPrimaryUnitOfMeasures = new HashSet<OrderServiceContentDAO>();
-            OrderServiceContentUnitOfMeasures = new HashSet<OrderServiceContentDAO>();
+            OrderServiceContents = new HashSet<OrderServiceContentDAO>();
             Services = new HashSet<ServiceDAO>();
         }
 
@@ -18,12 +17,11 @@ namespace SampleProject.Models
         public long StatusId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public DateTime? DeletedAt { get; set; }
+        public DateTime? DeleteAt { get; set; }
         public bool Used { get; set; }
 
         public virtual StatusDAO Status { get; set; }
-        public virtual ICollection<OrderServiceContentDAO> OrderServiceContentPrimaryUnitOfMeasures { get; set; }
-        public virtual ICollection<OrderServiceContentDAO> OrderServiceContentUnitOfMeasures { get; set; }
+        public virtual ICollection<OrderServiceContentDAO> OrderServiceContents { get; set; }
         public virtual ICollection<ServiceDAO> Services { get; set; }
     }
 }
