@@ -34,7 +34,7 @@ namespace SampleProject.Repositories
 		{
 			if (filter == null)
 				return query.Where(q => false);
-			query = query.Where(q => !q.DeleteAt.HasValue);
+			query = query.Where(q => !q.DeletedAt.HasValue);
 			query = query.Where(q => q.Id, filter.Id);
 			query = query.Where(q => q.Code, filter.Code);
 			query = query.Where(q => q.OrderDate, filter.OrderDate);
@@ -122,7 +122,7 @@ namespace SampleProject.Repositories
 				Used = q.Used,
 				CreatedAt = q.CreatedAt,
 				UpdatedAt = q.UpdatedAt,
-				DeleteAt = q.DeleteAt,
+				DeletedAt = q.DeletedAt,
 			}).ToListAsync();
 			return OrderServices;
 		}
@@ -150,7 +150,7 @@ namespace SampleProject.Repositories
 		{
 			CreatedAt = x.CreatedAt,
 			UpdatedAt = x.UpdatedAt,
-			DeleteAt = x.DeleteAt,
+			DeletedAt = x.DeletedAt,
 			Id = x.Id,
 			Code = x.Code,
 			OrderDate = x.OrderDate,
@@ -172,7 +172,7 @@ namespace SampleProject.Repositories
 			    Used = x.Used,
 			    CreatedAt = x.CreatedAt,
 			    UpdatedAt = x.UpdatedAt,
-			    DeleteAt = x.DeleteAt,
+			    DeletedAt = x.DeletedAt,
 		    }).FirstOrDefaultAsync();
 
 			if (OrderService == null)
@@ -206,14 +206,15 @@ namespace SampleProject.Repositories
 			OrderServiceDAO.Code = OrderService.Code;
 			OrderServiceDAO.OrderDate = OrderService.OrderDate;
 			OrderServiceDAO.Total = OrderService.Total;
-			OrderServiceDAO.UpdatedAt = DateTime.Now;
+			OrderServiceDAO.UpdatedAt = OrderService.UpdatedAt;
+			OrderServiceDAO.Used = OrderService.Used;
 			await DataContext.SaveChangesAsync();
 			await SaveReference(OrderService);
 			return true;
 		}
 		public async Task<bool> Delete(OrderService OrderService)
 		{
-			await DataContext.OrderService.Where(x => x.Id == OrderService.Id).UpdateFromQueryAsync(x => new OrderServiceDAO { DeleteAt = DateTime.Now });
+			await DataContext.OrderService.Where(x => x.Id == OrderService.Id).UpdateFromQueryAsync(x => new OrderServiceDAO { DeletedAt = DateTime.Now });
 			return true;
 		}
 		public async Task<bool> BulkMerge(List<OrderService> OrderServices)
@@ -239,7 +240,7 @@ namespace SampleProject.Repositories
 			List<long> Ids = OrderServices.Select(x => x.Id).ToList();
 			await DataContext.OrderService
 			    .Where(x => Ids.Contains(x.Id))
-			    .UpdateFromQueryAsync(x => new OrderServiceDAO { DeleteAt = DateTime.Now });
+			    .UpdateFromQueryAsync(x => new OrderServiceDAO { DeletedAt = DateTime.Now });
 			return true;
 		}
 		public async Task<bool> Used(List<long> Ids)

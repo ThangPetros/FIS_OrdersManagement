@@ -14,6 +14,10 @@ using System.Threading.Tasks;
 using Thinktecture;
 using TrueSight.Common;
 using Z.EntityFramework.Extensions;
+using Newtonsoft.Json;
+using Microsoft.Extensions.ObjectPool;
+using RabbitMQ.Client;
+using SampleProject.Handlers.Configuration;
 
 namespace SampleProject
 {
@@ -38,8 +42,24 @@ namespace SampleProject
             // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
             public void ConfigureServices(IServiceCollection services)
             {
-                  services.AddControllers();
+                  //services.AddControllers();
+                  _ = DataEntity.InformationResource;
+                  _ = DataEntity.WarningResource;
+                  _ = DataEntity.ErrorResource;
+                  services.AddControllers().AddNewtonsoftJson(
+                      options =>
+                      {
+                            options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+                            options.SerializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;
+                            options.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+                            options.SerializerSettings.DateFormatString = "yyyy-MM-ddTHH:mm:ss.fffK";
+                      });
 
+                  //services.AddSingleton<IRedisStore, RedisStore>();
+                  services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
+                  services.AddSingleton<IPooledObjectPolicy<IModel>, RabbitModelPooledObjectPolicy>();
+                  services.AddSingleton<IRabbitManager, RabbitManager>();
+                  services.AddHostedService<ConsumeRabbitMQHostedService>();
                   services.AddDbContext<DataContext>(options =>
                    options.UseSqlServer(Configuration.GetConnectionString("DataContext"), sqlOptions =>
                    {

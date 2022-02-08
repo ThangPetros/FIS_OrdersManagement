@@ -42,7 +42,7 @@ namespace SampleProject.Models
 
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 
-                entity.Property(e => e.DeleteAt).HasColumnType("datetime");
+                entity.Property(e => e.DeletedAt).HasColumnType("datetime");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -71,7 +71,7 @@ namespace SampleProject.Models
 
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 
-                entity.Property(e => e.DeleteAt).HasColumnType("datetime");
+                entity.Property(e => e.DeletedAt).HasColumnType("datetime");
 
                 entity.Property(e => e.OrderDate).HasColumnType("datetime");
 
@@ -92,7 +92,7 @@ namespace SampleProject.Models
 
                 entity.Property(e => e.Amount).HasColumnType("decimal(18, 4)");
 
-                entity.Property(e => e.Prive).HasColumnType("decimal(18, 4)");
+                entity.Property(e => e.Price).HasColumnType("decimal(18, 4)");
 
                 entity.HasOne(d => d.OrderService)
                     .WithMany(p => p.OrderServiceContents)
@@ -123,13 +123,13 @@ namespace SampleProject.Models
 
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 
-                entity.Property(e => e.DeleteAt).HasColumnType("datetime");
+                entity.Property(e => e.DeletedAt).HasColumnType("datetime");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(500);
 
-                entity.Property(e => e.Prive).HasColumnType("decimal(18, 4)");
+                entity.Property(e => e.Price).HasColumnType("decimal(18, 4)");
 
                 entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
 
@@ -169,7 +169,7 @@ namespace SampleProject.Models
 
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 
-                entity.Property(e => e.DeleteAt).HasColumnType("datetime");
+                entity.Property(e => e.DeletedAt).HasColumnType("datetime");
 
                 entity.Property(e => e.Name)
                     .IsRequired()

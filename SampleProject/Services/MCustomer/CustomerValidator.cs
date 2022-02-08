@@ -16,7 +16,7 @@ namespace SampleProject.Services.MCustomer
 		Task<bool> Delete(Customer Customer);
 		//Task<bool> BulkDelete(List<Customer> Customers);
 		Task<bool> BulkMerge(List<Customer> Customers);
-		//Task<bool> Import(List<Brand> Brands);
+		//Task<bool> Import(List<Customer> Customers);
 	}
 	public class CustomerValidator : ICustomerValidator
 	{
@@ -113,9 +113,9 @@ namespace SampleProject.Services.MCustomer
 		}
 		private async Task<bool> ValidateAddress(Customer Customer)
 		{
-			if (!string.IsNullOrWhiteSpace(Customer.Phone) && Customer.Phone.Length>500)
+			if (!string.IsNullOrWhiteSpace(Customer.Address) && Customer.Address.Length>500)
 			{
-				Customer.AddError(nameof(CustomerValidator), nameof(Customer.Phone), ErrorCode.AddressOverLength);
+				Customer.AddError(nameof(CustomerValidator), nameof(Customer.Address), ErrorCode.AddressOverLength);
 			}
 			return Customer.IsValidated;
 		}

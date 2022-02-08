@@ -35,7 +35,7 @@ namespace SampleProject.Repositories
 		{
 			if (filter == null)
 				return query.Where(q => false);
-			query = query.Where(q => !q.DeleteAt.HasValue);
+			query = query.Where(q => !q.DeletedAt.HasValue);
 			query = query.Where(q => q.Id, filter.Id);
 			query = query.Where(q => q.Code, filter.Code);
 			query = query.Where(q => q.Name, filter.Name);
@@ -140,7 +140,7 @@ namespace SampleProject.Repositories
 				Used = q.Used,
 				CreatedAt = q.CreatedAt,
 				UpdatedAt = q.UpdatedAt,
-				DeleteAt = q.DeleteAt,
+				DeletedAt = q.DeletedAt,
 			}).ToListAsync();
 			return Customers;
 		}
@@ -168,7 +168,7 @@ namespace SampleProject.Repositories
 		{
 			CreatedAt = x.CreatedAt,
 			UpdatedAt = x.UpdatedAt,
-			DeleteAt = x.DeleteAt,
+			DeletedAt = x.DeletedAt,
 			Id = x.Id,
 			Code = x.Code,
 			Name = x.Name,
@@ -198,7 +198,7 @@ namespace SampleProject.Repositories
 			    Used = x.Used,
 			    CreatedAt = x.CreatedAt,
 			    UpdatedAt = x.UpdatedAt,
-			    DeleteAt = x.DeleteAt,
+			    DeletedAt = x.DeletedAt,
 			    Status = x.Status == null ? null : new Status
 			    {
 				    Id = x.Status.Id,
@@ -240,14 +240,15 @@ namespace SampleProject.Repositories
 			CustomerDAO.Name = Customer.Name;
 			CustomerDAO.Name = Customer.Address;
 			CustomerDAO.StatusId = Customer.StatusId;
-			CustomerDAO.UpdatedAt = DateTime.Now;
+			CustomerDAO.UpdatedAt = Customer.UpdatedAt;
+			CustomerDAO.Used = Customer.Used;
 			await DataContext.SaveChangesAsync();
 			await SaveReference(Customer);
 			return true;
 		}
 		public async Task<bool> Delete(Customer Customer)
 		{
-			await DataContext.Customer.Where(x => x.Id == Customer.Id).UpdateFromQueryAsync(x => new CustomerDAO { DeleteAt = DateTime.Now });
+			await DataContext.Customer.Where(x => x.Id == Customer.Id).UpdateFromQueryAsync(x => new CustomerDAO { DeletedAt = DateTime.Now });
 			return true;
 		}
 		public async Task<bool> BulkMerge(List<Customer> Customers)
@@ -274,7 +275,7 @@ namespace SampleProject.Repositories
 				.Where(x => Ids.Contains(x.Id)).UpdateFromQueryAsync(x => new CustomerDAO { StatusId = 2 });*/
 			await DataContext.Customer
 				.Where(x => Ids.Contains(x.Id))
-				.UpdateFromQueryAsync(x => new CustomerDAO { DeleteAt = DateTime.Now });
+				.UpdateFromQueryAsync(x => new CustomerDAO { DeletedAt = DateTime.Now });
 			return true;
 		}
 		public async Task<bool> Used(List<long> Ids)

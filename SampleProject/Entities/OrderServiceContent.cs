@@ -18,7 +18,7 @@ namespace SampleProject.Entities
             public long UnitOfMeasureId { get; set; }
             public long Quantity { get; set; }
             public long RequestQuantity { get; set; }
-            public decimal Prive { get; set; }
+            public decimal Price { get; set; }
             public decimal Amount { get; set; }
 
             public virtual OrderServiceDAO OrderService { get; set; }
@@ -42,7 +42,7 @@ namespace SampleProject.Entities
 		public IdFilter PrimaryUnitOfMeasureId { get; set; }
 		public LongFilter Quantity { get; set; }
 		public LongFilter RequestQuantity { get; set; }
-		public DecimalFilter Prive { get; set; }
+		public DecimalFilter Price { get; set; }
 		public DecimalFilter Amount { get; set; }
 		public List<OrderServiceContentFilter> OrFilter { get; set; }
 		public OrderServiceContentOrder OrderBy { get; set; }
@@ -56,7 +56,7 @@ namespace SampleProject.Entities
 		PrimaryUnitOfMeasure = 2,
 		UnitOfMeasure = 3,
 		Quantity = 4,
-		Prive = 5
+		Price = 5
 	}
 	[Flags]
 	public enum OrderServiceContentSelect : long
@@ -67,6 +67,6 @@ namespace SampleProject.Entities
 		PrimaryUnitOfMeasure = E._2,
 		UnitOfMeasure = E._3,
 		Quantity = E._4,
-		Prive = E._5
+		Price = E._5
 	}
 }

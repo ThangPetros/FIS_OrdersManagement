@@ -33,12 +33,12 @@ namespace SampleProject.Repositories
 		{
 			if (filter == null)
 				return query.Where(q => false);
-			query = query.Where(q => !q.DeleteAt.HasValue);
+			query = query.Where(q => !q.DeletedAt.HasValue);
 			query = query.Where(q => q.Id, filter.Id);
 			query = query.Where(q => q.Code, filter.Code);
 			query = query.Where(q => q.Name, filter.Name);
 			query = query.Where(q => q.UnitOfMeasureId, filter.UnitOfMeasureId);
-			query = query.Where(q => q.Prive, filter.Prive);
+			query = query.Where(q => q.Price, filter.Price);
 			query = query.Where(q => q.StatusId, filter.StatusId);
 			query = query.Where(q => q.UpdatedAt, filter.UpdateTime);
 
@@ -58,7 +58,7 @@ namespace SampleProject.Repositories
 				queryable = queryable.Where(q => q.Code, ServiceFilter.Code);
 				queryable = queryable.Where(q => q.Name, ServiceFilter.Name);
 				queryable = queryable.Where(q => q.UnitOfMeasureId, ServiceFilter.UnitOfMeasureId);
-				queryable = queryable.Where(q => q.Prive, ServiceFilter.Prive);
+				queryable = queryable.Where(q => q.Price, ServiceFilter.Price);
 				queryable = queryable.Where(q => q.StatusId, ServiceFilter.StatusId);
 				initQuery = initQuery.Union(queryable);
 			}
@@ -80,8 +80,8 @@ namespace SampleProject.Repositories
 						case ServiceOrder.Name:
 							query = query.OrderBy(q => q.Name);
 							break;
-						case ServiceOrder.Prive:
-							query = query.OrderBy(q => q.Prive);
+						case ServiceOrder.Price:
+							query = query.OrderBy(q => q.Price);
 							break;
 						case ServiceOrder.Status:
 							query = query.OrderBy(q => q.StatusId);
@@ -106,8 +106,8 @@ namespace SampleProject.Repositories
 						case ServiceOrder.Name:
 							query = query.OrderByDescending(q => q.Name);
 							break;
-						case ServiceOrder.Prive:
-							query = query.OrderByDescending(q => q.Prive);
+						case ServiceOrder.Price:
+							query = query.OrderByDescending(q => q.Price);
 							break;
 						case ServiceOrder.Status:
 							query = query.OrderByDescending(q => q.StatusId);
@@ -129,7 +129,7 @@ namespace SampleProject.Repositories
 				Code = filter.Selects.Contains(ServiceSelect.Code) ? q.Code : default(string),
 				Name = filter.Selects.Contains(ServiceSelect.Name) ? q.Name : default(string),
 				UnitOfMeasureId = filter.Selects.Contains(ServiceSelect.UnitOfMeasure) ? q.UnitOfMeasureId : default(long),
-				Prive = filter.Selects.Contains(ServiceSelect.Prive) ? q.Prive : default(long),
+				Price = filter.Selects.Contains(ServiceSelect.Price) ? q.Price : default(long),
 				StatusId = filter.Selects.Contains(ServiceSelect.Status) ? q.StatusId : default(long),
 				Status = filter.Selects.Contains(ServiceSelect.Status) && q.Status != null ? new Status
 				{
@@ -140,7 +140,7 @@ namespace SampleProject.Repositories
 				Used = q.Used,
 				CreatedAt = q.CreatedAt,
 				UpdatedAt = q.UpdatedAt,
-				DeleteAt = q.DeleteAt,
+				DeletedAt = q.DeletedAt,
 			}).ToListAsync();
 			return Services;
 		}
@@ -168,12 +168,12 @@ namespace SampleProject.Repositories
 		{
 			CreatedAt = x.CreatedAt,
 			UpdatedAt = x.UpdatedAt,
-			DeleteAt = x.DeleteAt,
+			DeletedAt = x.DeletedAt,
 			Id = x.Id,
 			Code = x.Code,
 			Name = x.Name,
 			UnitOfMeasureId = x.UnitOfMeasureId,
-			Prive = x.Prive,
+			Price = x.Price,
 			StatusId = x.StatusId,
 			Used = x.Used,
 			Status = x.Status == null ? null : new Status
@@ -195,12 +195,12 @@ namespace SampleProject.Repositories
 			    Code = x.Code,
 			    Name = x.Name,
 			    UnitOfMeasureId = x.UnitOfMeasureId,
-			    Prive = x.Prive,
+			    Price = x.Price,
 			    StatusId = x.StatusId,
 			    Used = x.Used,
 			    CreatedAt = x.CreatedAt,
 			    UpdatedAt = x.UpdatedAt,
-			    DeleteAt = x.DeleteAt,
+			    DeletedAt = x.DeletedAt,
 			    Status = x.Status == null ? null : new Status
 			    {
 				    Id = x.Status.Id,
@@ -221,7 +221,7 @@ namespace SampleProject.Repositories
 			ServiceDAO.Code = Service.Code;
 			ServiceDAO.Name = Service.Name;
 			ServiceDAO.UnitOfMeasureId = Service.UnitOfMeasureId;
-			ServiceDAO.Prive = Service.Prive;
+			ServiceDAO.Price = Service.Price;
 			ServiceDAO.StatusId = Service.StatusId;
 			ServiceDAO.CreatedAt = DateTime.Now;//StaticParams.DateTimeNow;
 			ServiceDAO.UpdatedAt = DateTime.Now;//StaticParams.DateTimeNow;
@@ -242,16 +242,17 @@ namespace SampleProject.Repositories
 			ServiceDAO.Code = Service.Code;
 			ServiceDAO.Name = Service.Name;
 			ServiceDAO.UnitOfMeasureId = Service.UnitOfMeasureId;
-			ServiceDAO.Prive = Service.Prive;
+			ServiceDAO.Price = Service.Price;
 			ServiceDAO.StatusId = Service.StatusId;
-			ServiceDAO.UpdatedAt = DateTime.Now;
+			ServiceDAO.UpdatedAt = Service.UpdatedAt;
+			ServiceDAO.Used = Service.Used;
 			await DataContext.SaveChangesAsync();
 			await SaveReference(Service);
 			return true;
 		}
 		public async Task<bool> Delete(Service Service)
 		{
-			await DataContext.Service.Where(x => x.Id == Service.Id).UpdateFromQueryAsync(x => new ServiceDAO { DeleteAt = DateTime.Now });
+			await DataContext.Service.Where(x => x.Id == Service.Id).UpdateFromQueryAsync(x => new ServiceDAO { DeletedAt = DateTime.Now });
 			return true;
 		}
 		public async Task<bool> BulkMerge(List<Service> Services)
@@ -264,7 +265,7 @@ namespace SampleProject.Repositories
 				ServiceDAO.Code = Service.Code;
 				ServiceDAO.Name = Service.Name;
 				ServiceDAO.UnitOfMeasureId = Service.UnitOfMeasureId;
-				ServiceDAO.Prive = Service.Prive;
+				ServiceDAO.Price = Service.Price;
 				ServiceDAO.StatusId = Service.StatusId;
 				ServiceDAO.CreatedAt = DateTime.Now;
 				ServiceDAO.UpdatedAt = DateTime.Now;
@@ -278,7 +279,7 @@ namespace SampleProject.Repositories
 			List<long> Ids = Services.Select(x => x.Id).ToList();
 			await DataContext.Service
 			    .Where(x => Ids.Contains(x.Id))
-			    .UpdateFromQueryAsync(x => new ServiceDAO { DeleteAt = DateTime.Now });
+			    .UpdateFromQueryAsync(x => new ServiceDAO { DeletedAt = DateTime.Now });
 			return true;
 		}
 		public async Task<bool> Used(List<long> Ids)

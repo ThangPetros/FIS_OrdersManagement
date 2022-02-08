@@ -18,7 +18,7 @@ namespace SampleProject.Entities
             public long StatusId { get; set; }
             public DateTime CreatedAt { get; set; }
             public DateTime UpdatedAt { get; set; }
-            public DateTime? DeleteAt { get; set; }
+            public DateTime? DeletedAt { get; set; }
             public bool Used { get; set; }
 
             public Status Status { get; set; }

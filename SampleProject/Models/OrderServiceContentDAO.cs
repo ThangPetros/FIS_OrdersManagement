@@ -12,7 +12,7 @@ namespace SampleProject.Models
         public long UnitOfMeasureId { get; set; }
         public long Quantity { get; set; }
         public long RequestQuantity { get; set; }
-        public decimal Prive { get; set; }
+        public decimal Price { get; set; }
         public decimal Amount { get; set; }
 
         public virtual OrderServiceDAO OrderService { get; set; }
