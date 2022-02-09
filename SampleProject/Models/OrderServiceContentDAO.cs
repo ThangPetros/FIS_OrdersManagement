@@ -14,6 +14,8 @@ namespace SampleProject.Models
         public long RequestQuantity { get; set; }
         public decimal Price { get; set; }
         public decimal Amount { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         public virtual OrderServiceDAO OrderService { get; set; }
         public virtual UnitOfMeasureDAO PrimaryUnitOfMeasure { get; set; }
