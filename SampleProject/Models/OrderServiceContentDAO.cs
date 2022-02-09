@@ -16,6 +16,7 @@ namespace SampleProject.Models
         public decimal Amount { get; set; }
 
         public virtual OrderServiceDAO OrderService { get; set; }
+        public virtual UnitOfMeasureDAO PrimaryUnitOfMeasure { get; set; }
         public virtual ServiceDAO Service { get; set; }
         public virtual UnitOfMeasureDAO UnitOfMeasure { get; set; }
     }
