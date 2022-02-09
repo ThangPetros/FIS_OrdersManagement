@@ -86,7 +86,11 @@ namespace SampleProject.Models
             {
                 entity.Property(e => e.Amount).HasColumnType("decimal(18, 4)");
 
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+
                 entity.Property(e => e.Price).HasColumnType("decimal(18, 4)");
+
+                entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
 
                 entity.HasOne(d => d.OrderService)
                     .WithMany(p => p.OrderServiceContents)
