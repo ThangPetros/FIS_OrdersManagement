@@ -215,18 +215,18 @@ namespace SampleProject.Repositories
 		public async Task<bool> Create(Customer Customer)
 		{
 			CustomerDAO CustomerDAO = new CustomerDAO();
-			CustomerDAO.Id = Customer.Id;
+
 			CustomerDAO.Code = Customer.Code;
 			CustomerDAO.Name = Customer.Name;
 			CustomerDAO.Address = Customer.Address;
+			CustomerDAO.Phone = Customer.Phone;
 			CustomerDAO.StatusId = Customer.StatusId;
 			CustomerDAO.CreatedAt = DateTime.Now;//StaticParams.DateTimeNow;
 			CustomerDAO.UpdatedAt = DateTime.Now;//StaticParams.DateTimeNow;
 			CustomerDAO.Used = false;
+
 			DataContext.Customer.Add(CustomerDAO);
 			await DataContext.SaveChangesAsync();
-			Customer.Id = CustomerDAO.Id;
-			await SaveReference(Customer);
 			return true;
 		}
 
@@ -235,20 +235,23 @@ namespace SampleProject.Repositories
 			CustomerDAO CustomerDAO = DataContext.Customer.Where(x => x.Id == Customer.Id).FirstOrDefault();
 			if (CustomerDAO == null)
 				return false;
-			CustomerDAO.Id = Customer.Id;
+
 			CustomerDAO.Code = Customer.Code;
 			CustomerDAO.Name = Customer.Name;
-			CustomerDAO.Name = Customer.Address;
+			CustomerDAO.Address = Customer.Address;
+			CustomerDAO.Phone = Customer.Phone;
 			CustomerDAO.StatusId = Customer.StatusId;
 			CustomerDAO.UpdatedAt = Customer.UpdatedAt;
 			CustomerDAO.Used = Customer.Used;
+
 			await DataContext.SaveChangesAsync();
-			await SaveReference(Customer);
 			return true;
 		}
 		public async Task<bool> Delete(Customer Customer)
 		{
-			await DataContext.Customer.Where(x => x.Id == Customer.Id).UpdateFromQueryAsync(x => new CustomerDAO { DeletedAt = DateTime.Now });
+			Customer.DeletedAt = DateTime.Now;
+			await Update(Customer);
+			//await DataContext.Customer.Where(x => x.Id == Customer.Id).UpdateFromQueryAsync(x => new CustomerDAO { DeletedAt = DateTime.Now });
 			return true;
 		}
 		public async Task<bool> BulkMerge(List<Customer> Customers)
@@ -284,7 +287,5 @@ namespace SampleProject.Repositories
 		    .UpdateFromQueryAsync(x => new CustomerDAO { Used = true });
 			return true;
 		}
-		private async Task SaveReference(Customer customer)
-		{ }
 	}
 }
