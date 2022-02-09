@@ -20,6 +20,7 @@ namespace SampleProject.Entities
 		public DateTime? DeletedAt { get; set; }
 		public bool Used { get; set; }
 
+		public Customer Customer { get; set; }
 		public bool Equals(OrderService other)
 		{
 			return other != null && Id == other.Id;
