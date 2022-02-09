@@ -30,8 +30,6 @@ namespace SampleProject.Models
         {
             modelBuilder.Entity<CustomerDAO>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Address)
                     .IsRequired()
                     .HasMaxLength(500);
@@ -58,13 +56,11 @@ namespace SampleProject.Models
                     .WithMany(p => p.Customers)
                     .HasForeignKey(d => d.StatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Customer_Status (ENUM)");
+                    .HasConstraintName("FK__Customer__Status__29572725");
             });
 
             modelBuilder.Entity<OrderServiceDAO>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Code)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -83,13 +79,11 @@ namespace SampleProject.Models
                     .WithMany(p => p.OrderServices)
                     .HasForeignKey(d => d.CustomerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrderService_Customer");
+                    .HasConstraintName("FK__OrderServ__Custo__300424B4");
             });
 
             modelBuilder.Entity<OrderServiceContentDAO>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Amount).HasColumnType("decimal(18, 4)");
 
                 entity.Property(e => e.Price).HasColumnType("decimal(18, 4)");
@@ -98,25 +92,29 @@ namespace SampleProject.Models
                     .WithMany(p => p.OrderServiceContents)
                     .HasForeignKey(d => d.OrderServiceId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrderServiceContent_OrderService");
+                    .HasConstraintName("FK__OrderServ__Order__33D4B598");
+
+                entity.HasOne(d => d.PrimaryUnitOfMeasure)
+                    .WithMany(p => p.OrderServiceContentPrimaryUnitOfMeasures)
+                    .HasForeignKey(d => d.PrimaryUnitOfMeasureId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__OrderServ__Prima__34C8D9D1");
 
                 entity.HasOne(d => d.Service)
                     .WithMany(p => p.OrderServiceContents)
                     .HasForeignKey(d => d.ServiceId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrderServiceContent_Service");
+                    .HasConstraintName("FK__OrderServ__Servi__32E0915F");
 
                 entity.HasOne(d => d.UnitOfMeasure)
-                    .WithMany(p => p.OrderServiceContents)
+                    .WithMany(p => p.OrderServiceContentUnitOfMeasures)
                     .HasForeignKey(d => d.UnitOfMeasureId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrderServiceContent_UnitOfMeasure (MDM)");
+                    .HasConstraintName("FK__OrderServ__UnitO__35BCFE0A");
             });
 
             modelBuilder.Entity<ServiceDAO>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Code)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -137,19 +135,17 @@ namespace SampleProject.Models
                     .WithMany(p => p.Services)
                     .HasForeignKey(d => d.StatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Service_Status (ENUM)");
+                    .HasConstraintName("FK__Service__StatusI__2D27B809");
 
                 entity.HasOne(d => d.UnitOfMeasure)
                     .WithMany(p => p.Services)
                     .HasForeignKey(d => d.UnitOfMeasureId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Service_UnitOfMeasure (MDM)");
+                    .HasConstraintName("FK__Service__UnitOfM__2C3393D0");
             });
 
             modelBuilder.Entity<StatusDAO>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Code)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -161,8 +157,6 @@ namespace SampleProject.Models
 
             modelBuilder.Entity<UnitOfMeasureDAO>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Code)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -181,7 +175,7 @@ namespace SampleProject.Models
                     .WithMany(p => p.UnitOfMeasures)
                     .HasForeignKey(d => d.StatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_UnitOfMeasure (MDM)_Status (ENUM)");
+                    .HasConstraintName("FK__UnitOfMea__Statu__267ABA7A");
             });
 
             OnModelCreatingPartial(modelBuilder);
