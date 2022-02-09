@@ -25,6 +25,8 @@ namespace SampleProject.Tests
 		{
 
 		}
+		
+
 		[SetUp]
 		public async Task Setup()
 		{
@@ -59,7 +61,7 @@ namespace SampleProject.Tests
 		}
 
 		//Create
-		[Test]
+		//[Test]
 		public async Task UnitOfMeasure_Create_ReturnTrue()
 		{
 			// Create Instance
@@ -75,7 +77,7 @@ namespace SampleProject.Tests
 			Assert.AreEqual(Input.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 		}
 		//Update
-		[Test]
+		//[Test]
 		public async Task UnitOfMeasure_Update_ReturnTrue()
 		{
 			// Create Instance
@@ -104,7 +106,7 @@ namespace SampleProject.Tests
 			Assert.AreEqual(Input.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 		}
 		//Delete
-		//[Test]
+		[Test]
 		public async Task UnitOfMeasure_Delete_ReturnTrue()
 		{
 			// Create Instance
@@ -118,7 +120,7 @@ namespace SampleProject.Tests
 		}
 
 		//List Order By Name + Skip and Take
-		[Test]
+		//[Test]
 		public async Task UnitOfMeasure_GetListByName_ReturnTrue()
 		{
 			// Create Instance
