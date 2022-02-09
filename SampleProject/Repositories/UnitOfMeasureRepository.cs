@@ -211,7 +211,7 @@ namespace SampleProject.Repositories
 		public async Task<bool> Create(UnitOfMeasure UnitOfMeasure)
 		{
 			UnitOfMeasureDAO UnitOfMeasureDAO = new UnitOfMeasureDAO();
-			UnitOfMeasureDAO.Id = UnitOfMeasure.Id;
+			//UnitOfMeasureDAO.Id = UnitOfMeasure.Id;
 			UnitOfMeasureDAO.Code = UnitOfMeasure.Code;
 			UnitOfMeasureDAO.Name = UnitOfMeasure.Name;
 			UnitOfMeasureDAO.StatusId = UnitOfMeasure.StatusId;
@@ -220,7 +220,7 @@ namespace SampleProject.Repositories
 			UnitOfMeasureDAO.Used = false;
 			DataContext.UnitOfMeasure.Add(UnitOfMeasureDAO);
 			await DataContext.SaveChangesAsync();
-			UnitOfMeasure.Id = UnitOfMeasureDAO.Id;
+			//UnitOfMeasure.Id = UnitOfMeasureDAO.Id;
 			await SaveReference(UnitOfMeasure);
 			return true;
 		}
@@ -235,7 +235,6 @@ namespace SampleProject.Repositories
 			UnitOfMeasureDAO.Name = UnitOfMeasure.Name;
 			UnitOfMeasureDAO.StatusId = UnitOfMeasure.StatusId;
 			UnitOfMeasureDAO.UpdatedAt = UnitOfMeasure.UpdatedAt;
-			//UnitOfMeasureDAO.DeletedAt = UnitOfMeasure.DeletedAt;
 			UnitOfMeasureDAO.Used = UnitOfMeasure.Used;
 
 			await DataContext.SaveChangesAsync();
