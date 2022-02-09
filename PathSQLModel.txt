@@ -1,0 +1,9 @@
+Create DAO
+
+- Open Package Manager Console
+- Type: cd TênProject
+
+
+
+- Type: dotnet ef dbcontext scaffold  "Data Source=ADMIN\SQLEXPRESS;Initial Catalog=OrdersManagement;Persist Security Info=True;User ID=TaToan;Password=00000;multipleactiveresultsets=True;" Microsoft.EntityFrameworkCore.SqlServer -c DataContext  -o Models -f --no-build --use-database-names --json
+

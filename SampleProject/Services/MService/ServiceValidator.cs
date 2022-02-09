@@ -166,7 +166,7 @@ namespace SampleProject.Services.MService
 		{
 			if (await ValidateId(Service))
 			{
-				var oldData = await UOW.CustomerRepository.Get(Service.Id);
+				var oldData = await UOW.ServiceRepository.Get(Service.Id);
 				if (oldData.Used)
 				{
 					Service.AddError(nameof(ServiceValidator), nameof(Service.Id), ErrorCode.ServiceInUsed);
