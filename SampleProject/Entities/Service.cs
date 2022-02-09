@@ -14,13 +14,14 @@ namespace SampleProject.Entities
             public string Code { get; set; }
             public string Name { get; set; }
             public long UnitOfMeasureId { get; set; }
-            public decimal Price { get; set; }
+            public decimal Price { get; set; } // Price
             public long StatusId { get; set; }
             public DateTime CreatedAt { get; set; }
             public DateTime UpdatedAt { get; set; }
             public DateTime? DeletedAt { get; set; }
             public bool Used { get; set; }
-		public Status status { get; set; }
+		public Status Status { get; set; }
+		public UnitOfMeasure UnitOfMeasure { get; set; }
 
 		public bool Equals(Service other)
 		{
@@ -40,7 +41,7 @@ namespace SampleProject.Entities
 		public DecimalFilter Price { get; set; }
 		public IdFilter StatusId { get; set; }
 		public DateFilter UpdateTime { get; set; }
-		public List<Service> OrFilter { get; set; }
+		public List<ServiceFilter> OrFilter { get; set; }
 		public ServiceOrder OrderBy { get; set; }
 		public ServiceSelect Selects { get; set; }
 	}
@@ -50,9 +51,10 @@ namespace SampleProject.Entities
 		Id = 0,
 		Code = 1,
 		Name = 2,
-		Price = 3,
-		Status = 4,
-		UpdateAt = 5
+		UnitOfMeasure = 3,
+		Price = 4,
+		Status = 5,
+		UpdateAt = 6
 	}
 	[Flags]
 	public enum ServiceSelect : long
@@ -61,7 +63,8 @@ namespace SampleProject.Entities
 		Id = E._0,
 		Code = E._1,
 		Name = E._2,
-		Price = E._3,
-		Status = E._4,
+		UnitOfMeasure = E._3,
+		Price = E._4,
+		Status = E._5
 	}
 }

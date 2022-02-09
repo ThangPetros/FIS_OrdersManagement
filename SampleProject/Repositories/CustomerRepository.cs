@@ -124,7 +124,7 @@ namespace SampleProject.Repositories
 		}
 		private async Task<List<Customer>> DynamicSelect(IQueryable<CustomerDAO> query, CustomerFilter filter)
 		{
-			List<Customer> Brands = await query.Select(q => new Customer()
+			List<Customer> Customers = await query.Select(q => new Customer()
 			{
 				Id = filter.Selects.Contains(CustomerSelect.Id) ? q.Id : default(long),
 				Code = filter.Selects.Contains(CustomerSelect.Code) ? q.Code : default(string),
@@ -142,7 +142,7 @@ namespace SampleProject.Repositories
 				UpdatedAt = q.UpdatedAt,
 				DeletedAt = q.DeletedAt,
 			}).ToListAsync();
-			return Brands;
+			return Customers;
 		}
 		public async Task<int> Count(CustomerFilter filter)
 		{
@@ -240,7 +240,8 @@ namespace SampleProject.Repositories
 			CustomerDAO.Name = Customer.Name;
 			CustomerDAO.Name = Customer.Address;
 			CustomerDAO.StatusId = Customer.StatusId;
-			CustomerDAO.UpdatedAt = DateTime.Now;
+			CustomerDAO.UpdatedAt = Customer.UpdatedAt;
+			CustomerDAO.Used = Customer.Used;
 			await DataContext.SaveChangesAsync();
 			await SaveReference(Customer);
 			return true;
@@ -250,7 +251,7 @@ namespace SampleProject.Repositories
 			await DataContext.Customer.Where(x => x.Id == Customer.Id).UpdateFromQueryAsync(x => new CustomerDAO { DeletedAt = DateTime.Now });
 			return true;
 		}
-		public async Task<bool> BulkDelete(List<Customer> Customers)
+		public async Task<bool> BulkMerge(List<Customer> Customers)
 		{
 			List<CustomerDAO> CustomerDAOs = new List<CustomerDAO>();
 			foreach (Customer Customer in Customers)
@@ -267,12 +268,14 @@ namespace SampleProject.Repositories
 			await DataContext.BulkMergeAsync(CustomerDAOs);
 			return true;
 		}
-		public async Task<bool> BulkMerge(List<Customer> Customers)
+		public async Task<bool> BulkDelete(List<Customer> Customers)
 		{
 			List<long> Ids = Customers.Select(x => x.Id).ToList();
+			/*await DataContext.Customer
+				.Where(x => Ids.Contains(x.Id)).UpdateFromQueryAsync(x => new CustomerDAO { StatusId = 2 });*/
 			await DataContext.Customer
-			    .Where(x => Ids.Contains(x.Id))
-			    .UpdateFromQueryAsync(x => new CustomerDAO { DeletedAt = DateTime.Now });
+				.Where(x => Ids.Contains(x.Id))
+				.UpdateFromQueryAsync(x => new CustomerDAO { DeletedAt = DateTime.Now });
 			return true;
 		}
 		public async Task<bool> Used(List<long> Ids)
