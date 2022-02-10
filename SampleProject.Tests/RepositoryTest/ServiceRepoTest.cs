@@ -93,8 +93,8 @@ namespace SampleProject.Tests.RepositoryTest
 			Assert.AreEqual(Input.Price, Output.Price);
 			Assert.AreEqual(Input.StatusId, Output.StatusId);
 			Assert.AreEqual(Input.UnitOfMeasureId, Output.UnitOfMeasureId);
-			Assert.AreEqual(Input.CreatedAt, Output.CreatedAt);
-			Assert.AreEqual(Input.UpdatedAt, Output.UpdatedAt);
+			Assert.AreEqual(Input.CreatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.CreatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
+			Assert.AreEqual(Input.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 		}
 
 		// Update 
@@ -128,8 +128,7 @@ namespace SampleProject.Tests.RepositoryTest
 			Assert.AreEqual(Input.Price, Output.Price);
 			Assert.AreEqual(Input.StatusId, Output.StatusId);
 			Assert.AreEqual(Input.UnitOfMeasureId, Output.UnitOfMeasureId);
-			Assert.AreEqual(Input.CreatedAt, Output.CreatedAt);
-			Assert.AreEqual(Input.UpdatedAt, Output.UpdatedAt);
+			Assert.AreEqual(Input.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 		}
 
 		// Delete
@@ -137,13 +136,30 @@ namespace SampleProject.Tests.RepositoryTest
 		public async Task Service_Delete_ReturnTrue()
 		{
 			// Create Instance
-			await uow.ServiceRepository.Create(Input);
+			await repository.Create(Input);
 
 			// Delete
-			await uow.ServiceRepository.Delete(Input);
-
+			var DeleteData = DataContext.Service.SingleOrDefault(x => x.Id == 1);
+			await repository.Delete(ConvertDAOToEntity(DeleteData));
 			// Assert
-			Assert.IsNotNull(Input.DeletedAt);
+			var Output = await repository.Get(1);//DataContext.OrderService.SingleOrDefault(x => x.Id == 1);
+			Assert.IsNotNull(Output.DeletedAt);
+		}
+		public Service ConvertDAOToEntity(ServiceDAO ServiceDAO)
+		{
+			return new Service
+			{
+				Id = ServiceDAO.Id,
+				Code = ServiceDAO.Code,
+				Name = ServiceDAO.Name,
+				UnitOfMeasureId = ServiceDAO.UnitOfMeasureId,
+				Price = ServiceDAO.Price,
+				StatusId = ServiceDAO.StatusId,
+				CreatedAt = ServiceDAO.CreatedAt,
+				UpdatedAt = ServiceDAO.UpdatedAt,
+				DeletedAt = ServiceDAO.DeletedAt,
+				Used = ServiceDAO.Used,
+			};
 		}
 	}
 }
