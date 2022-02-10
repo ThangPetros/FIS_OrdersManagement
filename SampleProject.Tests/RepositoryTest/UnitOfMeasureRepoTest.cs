@@ -106,19 +106,33 @@ namespace SampleProject.Tests
 			Assert.AreEqual(Input.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 		}
 		//Delete
-		//[Test]
+		[Test]
 		public async Task UnitOfMeasure_Delete_ReturnTrue()
 		{
 			// Create Instance
-			await uow.UnitOfMeasureRepository.Create(Input);
+			await repository.Create(Input);
 
 			// Delete
-			await uow.UnitOfMeasureRepository.Delete(Input);
-
-			//Assert
-			Assert.IsNotNull(Input.DeletedAt);
+			var DeleteData = DataContext.UnitOfMeasure.SingleOrDefault(x => x.Id == 1);
+			await repository.Delete(ConvertDAOToEntity(DeleteData));
+			// Assert
+			var Output = await repository.Get(1);//DataContext.OrderService.SingleOrDefault(x => x.Id == 1);
+			Assert.IsNotNull(Output.DeletedAt);
 		}
-
+		public UnitOfMeasure ConvertDAOToEntity(UnitOfMeasureDAO UnitOfMeasureDAO)
+		{
+			return new UnitOfMeasure
+			{
+				Id = UnitOfMeasureDAO.Id,
+				Code = UnitOfMeasureDAO.Code,
+				Name = UnitOfMeasureDAO.Name,
+				StatusId = UnitOfMeasureDAO.StatusId,
+				CreatedAt = UnitOfMeasureDAO.CreatedAt,
+				UpdatedAt = UnitOfMeasureDAO.UpdatedAt,
+				DeletedAt = UnitOfMeasureDAO.DeletedAt,
+				Used = UnitOfMeasureDAO.Used,
+			};
+		}
 		//List Order By Name + Skip and Take
 		//[Test]
 		public async Task UnitOfMeasure_GetListByName_ReturnTrue()
