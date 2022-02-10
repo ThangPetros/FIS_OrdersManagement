@@ -165,7 +165,6 @@ namespace SampleProject.Tests.RepositoryTest
 				RequestQuantity = 100,
 				Price = 200,
 				Amount = 200,
-				CreatedAt = UpdateData.CreatedAt,
 				UpdatedAt = UpdateData.CreatedAt
 			};
             await repository.Update(Input);
@@ -179,7 +178,6 @@ namespace SampleProject.Tests.RepositoryTest
 			Assert.AreEqual(Input.RequestQuantity, Output.RequestQuantity);
 			Assert.AreEqual(Input.Price, Output.Price);
 			Assert.AreEqual(Input.Amount, Output.Amount);
-			Assert.AreEqual(Input.CreatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.CreatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 			Assert.AreEqual(Input.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 		}
     }
