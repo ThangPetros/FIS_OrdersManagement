@@ -110,24 +110,39 @@ namespace SampleProject.Tests.RepositoryTest
 			Assert.AreEqual(Input.Phone, Output.Phone);
 			Assert.AreEqual(Input.StatusId, Output.StatusId);
 			Assert.AreEqual(Input.Used, Output.Used);
-			Assert.AreEqual(Input.CreatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.CreatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 			Assert.AreEqual(Input.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 		}
 
 		// Delete
-		//[Test]
+		[Test]
 		public async Task Customer_Delete_ReturnTrue()
 		{
 			// Create Instance
 			await repository.Create(Input);
 
 			// Delete
-			await repository.Delete(Input);
-
+			var DeleteData = DataContext.Customer.SingleOrDefault(x => x.Id == 1);
+			await repository.Delete(ConvertDAOToEntity(DeleteData));
 			// Assert
-			Assert.IsNotNull(Input.DeletedAt);
+			var Output = await repository.Get(1);//DataContext.OrderService.SingleOrDefault(x => x.Id == 1);
+			Assert.IsNotNull(Output.DeletedAt);
 		}
-
+		public Customer ConvertDAOToEntity(CustomerDAO CustomerDAO)
+		{
+			return new Customer
+			{
+				Id = CustomerDAO.Id,
+				Code = CustomerDAO.Code,
+				Name = CustomerDAO.Name,
+				Phone = CustomerDAO.Phone,
+				Address = CustomerDAO.Address,
+				StatusId = CustomerDAO.StatusId,
+				CreatedAt = CustomerDAO.CreatedAt,
+				UpdatedAt = CustomerDAO.UpdatedAt,
+				DeletedAt = CustomerDAO.DeletedAt,
+				Used = CustomerDAO.Used,
+			};
+		}
 		//List Order By Name + Skip and Take
 		//[Test]
 		public async Task Customer_GetListByName_ReturnTrue()

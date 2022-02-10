@@ -250,9 +250,7 @@ namespace SampleProject.Repositories
 		}
 		public async Task<bool> Delete(Customer Customer)
 		{
-			Customer.DeletedAt = DateTime.Now;
-			await Update(Customer);
-			//await DataContext.Customer.Where(x => x.Id == Customer.Id).UpdateFromQueryAsync(x => new CustomerDAO { DeletedAt = DateTime.Now });
+			await DataContext.Customer.Where(x => x.Id == Customer.Id).UpdateFromQueryAsync(x => new CustomerDAO { DeletedAt = DateTime.Now });
 			return true;
 		}
 		public async Task<bool> BulkMerge(List<Customer> Customers)

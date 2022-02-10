@@ -215,8 +215,8 @@ namespace SampleProject.Repositories
 			OrderServiceContentDAO.RequestQuantity = OrderServiceContent.RequestQuantity;
 			OrderServiceContentDAO.Price = OrderServiceContent.Price;
 			OrderServiceContentDAO.Amount = OrderServiceContent.Amount;
-			OrderServiceContentDAO.CreatedAt = DateTime.Now;
-			OrderServiceContentDAO.UpdatedAt = DateTime.Now;
+			OrderServiceContentDAO.CreatedAt = OrderServiceContent.CreatedAt;
+			OrderServiceContentDAO.UpdatedAt = OrderServiceContent.UpdatedAt;
 
 			DataContext.OrderServiceContent.Add(OrderServiceContentDAO);
 			await DataContext.SaveChangesAsync();
@@ -235,7 +235,7 @@ namespace SampleProject.Repositories
 			OrderServiceContentDAO.RequestQuantity = OrderServiceContent.RequestQuantity;
 			OrderServiceContentDAO.Price = OrderServiceContent.Price;
 			OrderServiceContentDAO.Amount = OrderServiceContent.Amount;
-			OrderServiceContentDAO.UpdatedAt = DateTime.Now;
+			OrderServiceContentDAO.UpdatedAt = OrderServiceContent.UpdatedAt;
 
 			await DataContext.SaveChangesAsync();
 			return true;
