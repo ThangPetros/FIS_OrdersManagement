@@ -133,7 +133,7 @@ namespace SampleProject.Tests.RepositoryTest
 		}
 
 		// Delete
-		[Test]
+		//[Test]
 		public async Task Service_Delete_ReturnTrue()
 		{
 			// Create Instance
