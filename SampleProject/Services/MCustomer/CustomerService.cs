@@ -13,8 +13,8 @@ namespace SampleProject.Services.MCustomer
 {
 	public interface ICustomerService : IServiceScoped
 	{
-		Task<int> Count(CustomerFilter BrandFilter);
-		Task<List<Customer>> List(CustomerFilter BrandFilter);
+		Task<int> Count(CustomerFilter CustomerFilter);
+		Task<List<Customer>> List(CustomerFilter CustomerFilter);
 		Task<Customer> Get(long Id);
 		Task<Customer> Create(Customer Customer);
 		Task<Customer> Update(Customer Customer);

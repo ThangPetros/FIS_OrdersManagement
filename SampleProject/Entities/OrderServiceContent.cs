@@ -20,8 +20,10 @@ namespace SampleProject.Entities
             public long RequestQuantity { get; set; }
             public decimal Price { get; set; }
             public decimal Amount { get; set; }
+		public DateTime CreatedAt { get; set; }
+		public DateTime UpdatedAt { get; set; }
 
-            public virtual OrderServiceDAO OrderService { get; set; }
+		public virtual OrderServiceDAO OrderService { get; set; }
             public virtual UnitOfMeasureDAO PrimaryUnitOfMeasure { get; set; }
             public virtual ServiceDAO Service { get; set; }
             public virtual UnitOfMeasureDAO UnitOfMeasure { get; set; }
@@ -36,6 +38,7 @@ namespace SampleProject.Entities
 	}
 	public class OrderServiceContentFilter : FilterEntity
 	{
+		public IdFilter Id { get; set; }
 		public IdFilter ServiceId { get; set; }
 		public IdFilter OrderServiceId { get; set; }
 		public IdFilter UnitOfMeasureId { get; set; }
@@ -44,6 +47,7 @@ namespace SampleProject.Entities
 		public LongFilter RequestQuantity { get; set; }
 		public DecimalFilter Price { get; set; }
 		public DecimalFilter Amount { get; set; }
+		public DateFilter UpdateTime { get; set; }
 		public List<OrderServiceContentFilter> OrFilter { get; set; }
 		public OrderServiceContentOrder OrderBy { get; set; }
 		public OrderServiceContentSelect Selects { get; set; }
@@ -51,22 +55,24 @@ namespace SampleProject.Entities
 	[JsonConverter(typeof(StringEnumConverter))]
 	public enum OrderServiceContentOrder
 	{
-		Service = 0,
-		OrderService = 1,
-		PrimaryUnitOfMeasure = 2,
-		UnitOfMeasure = 3,
-		Quantity = 4,
-		Price = 5
+		Id = 0,
+		Service = 1,
+		OrderService = 2,
+		PrimaryUnitOfMeasure = 3,
+		UnitOfMeasure = 4,
+		Quantity = 5,
+		Price = 6
 	}
 	[Flags]
 	public enum OrderServiceContentSelect : long
 	{
 		ALL = E.ALL,
-		Service = E._0,
-		OrderService = E._1,
-		PrimaryUnitOfMeasure = E._2,
-		UnitOfMeasure = E._3,
-		Quantity = E._4,
-		Price = E._5
+		Id = E._0,
+		Service = E._1,
+		OrderService = E._2,
+		PrimaryUnitOfMeasure = E._3,
+		UnitOfMeasure = E._4,
+		Quantity = E._5,
+		Price = E._6
 	}
 }

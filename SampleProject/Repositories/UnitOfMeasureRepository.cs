@@ -211,17 +211,16 @@ namespace SampleProject.Repositories
 		public async Task<bool> Create(UnitOfMeasure UnitOfMeasure)
 		{
 			UnitOfMeasureDAO UnitOfMeasureDAO = new UnitOfMeasureDAO();
-			UnitOfMeasureDAO.Id = UnitOfMeasure.Id;
+			
 			UnitOfMeasureDAO.Code = UnitOfMeasure.Code;
 			UnitOfMeasureDAO.Name = UnitOfMeasure.Name;
 			UnitOfMeasureDAO.StatusId = UnitOfMeasure.StatusId;
-			UnitOfMeasureDAO.CreatedAt = DateTime.Now;
-			UnitOfMeasureDAO.UpdatedAt = DateTime.Now;
+			UnitOfMeasureDAO.CreatedAt = UnitOfMeasure.CreatedAt;
+			UnitOfMeasureDAO.UpdatedAt = UnitOfMeasure.UpdatedAt;
 			UnitOfMeasureDAO.Used = false;
+
 			DataContext.UnitOfMeasure.Add(UnitOfMeasureDAO);
 			await DataContext.SaveChangesAsync();
-			UnitOfMeasure.Id = UnitOfMeasureDAO.Id;
-			await SaveReference(UnitOfMeasure);
 			return true;
 		}
 
@@ -230,16 +229,14 @@ namespace SampleProject.Repositories
 			UnitOfMeasureDAO UnitOfMeasureDAO = DataContext.UnitOfMeasure.Where(x => x.Id == UnitOfMeasure.Id).FirstOrDefault();
 			if (UnitOfMeasureDAO == null)
 				return false;
-			UnitOfMeasureDAO.Id = UnitOfMeasure.Id;
+
 			UnitOfMeasureDAO.Code = UnitOfMeasure.Code;
 			UnitOfMeasureDAO.Name = UnitOfMeasure.Name;
 			UnitOfMeasureDAO.StatusId = UnitOfMeasure.StatusId;
 			UnitOfMeasureDAO.UpdatedAt = UnitOfMeasure.UpdatedAt;
-			//UnitOfMeasureDAO.DeletedAt = UnitOfMeasure.DeletedAt;
 			UnitOfMeasureDAO.Used = UnitOfMeasure.Used;
 
 			await DataContext.SaveChangesAsync();
-			await SaveReference(UnitOfMeasure);
 			return true;
 		}
 
@@ -277,11 +274,6 @@ namespace SampleProject.Repositories
 			    .UpdateFromQueryAsync(x => new UnitOfMeasureDAO { DeletedAt = DateTime.Now });
 			return true;
 		}
-
-		private async Task SaveReference(UnitOfMeasure UnitOfMeasure)
-		{
-		}
-
 		public async Task<bool> Used(List<long> Ids)
 		{
 			await DataContext.UnitOfMeasure.Where(x => Ids.Contains(x.Id))

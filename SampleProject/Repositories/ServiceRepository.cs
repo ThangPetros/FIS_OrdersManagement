@@ -217,19 +217,18 @@ namespace SampleProject.Repositories
 		public async Task<bool> Create(Service Service)
 		{
 			ServiceDAO ServiceDAO = new ServiceDAO();
-			ServiceDAO.Id = Service.Id;
+
 			ServiceDAO.Code = Service.Code;
 			ServiceDAO.Name = Service.Name;
 			ServiceDAO.UnitOfMeasureId = Service.UnitOfMeasureId;
 			ServiceDAO.Price = Service.Price;
 			ServiceDAO.StatusId = Service.StatusId;
-			ServiceDAO.CreatedAt = DateTime.Now;//StaticParams.DateTimeNow;
-			ServiceDAO.UpdatedAt = DateTime.Now;//StaticParams.DateTimeNow;
+			ServiceDAO.CreatedAt = Service.CreatedAt;//StaticParams.DateTimeNow;
+			ServiceDAO.UpdatedAt = Service.UpdatedAt;//StaticParams.DateTimeNow;
 			ServiceDAO.Used = false;
+
 			DataContext.Service.Add(ServiceDAO);
 			await DataContext.SaveChangesAsync();
-			Service.Id = ServiceDAO.Id;
-			await SaveReference(Service);
 			return true;
 		}
 
@@ -238,7 +237,7 @@ namespace SampleProject.Repositories
 			ServiceDAO ServiceDAO = DataContext.Service.Where(x => x.Id == Service.Id).FirstOrDefault();
 			if (ServiceDAO == null)
 				return false;
-			ServiceDAO.Id = Service.Id;
+
 			ServiceDAO.Code = Service.Code;
 			ServiceDAO.Name = Service.Name;
 			ServiceDAO.UnitOfMeasureId = Service.UnitOfMeasureId;
@@ -246,13 +245,15 @@ namespace SampleProject.Repositories
 			ServiceDAO.StatusId = Service.StatusId;
 			ServiceDAO.UpdatedAt = Service.UpdatedAt;
 			ServiceDAO.Used = Service.Used;
+
 			await DataContext.SaveChangesAsync();
-			await SaveReference(Service);
 			return true;
 		}
 		public async Task<bool> Delete(Service Service)
 		{
-			await DataContext.Service.Where(x => x.Id == Service.Id).UpdateFromQueryAsync(x => new ServiceDAO { DeletedAt = DateTime.Now });
+			Service.DeletedAt = DateTime.Now;
+			await Update(Service);
+			//await DataContext.Service.Where(x => x.Id == Service.Id).UpdateFromQueryAsync(x => new ServiceDAO { DeletedAt = DateTime.Now });
 			return true;
 		}
 		public async Task<bool> BulkMerge(List<Service> Services)
@@ -288,7 +289,5 @@ namespace SampleProject.Repositories
 		    .UpdateFromQueryAsync(x => new ServiceDAO { Used = true });
 			return true;
 		}
-		private async Task SaveReference(Service service)
-		{ }
 	}
 }

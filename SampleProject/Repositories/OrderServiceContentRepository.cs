@@ -16,9 +16,9 @@ namespace SampleProject.Repositories
 		Task<List<OrderServiceContent>> List(OrderServiceContentFilter OrderServiceContentFilter);
 		Task<List<OrderServiceContent>> List(List<long> Ids);
 		Task<OrderServiceContent> Get(long Id);
-		/*Task<bool> Create(OrderServiceContent OrderServiceContent);
+		Task<bool> Create(OrderServiceContent OrderServiceContent);
 		Task<bool> Update(OrderServiceContent OrderServiceContent);
-		Task<bool> Delete(OrderServiceContent OrderServiceContent);
+		/*Task<bool> Delete(OrderServiceContent OrderServiceContent);
 		Task<bool> BulkMerge(List<OrderServiceContent> OrderServiceContents);
 		Task<bool> BulkDelete(List<OrderServiceContent> OrderServiceContents);*/
 	}
@@ -165,6 +165,8 @@ namespace SampleProject.Repositories
 			List<OrderServiceContent> OrderServiceContents = await DataContext.OrderServiceContent.AsNoTracking()
 		.Where(x => Ids.Contains(x.Id)).Select(x => new OrderServiceContent()
 		{
+			CreatedAt = x.CreatedAt,
+			UpdatedAt = x.UpdatedAt,
 			Id = x.Id,
 			ServiceId = x.ServiceId,
 			OrderServiceId = x.OrderServiceId,
@@ -191,7 +193,9 @@ namespace SampleProject.Repositories
 			    Quantity = x.Quantity,
 			    Price = x.Price,
 			    RequestQuantity = x.RequestQuantity,
-			    Amount = x.Amount
+			    Amount = x.Amount,
+			    CreatedAt = x.CreatedAt,
+			    UpdatedAt = x.UpdatedAt
 		    }).FirstOrDefaultAsync();
 
 			if (OrderServiceContent == null)
@@ -199,8 +203,42 @@ namespace SampleProject.Repositories
 
 			return OrderServiceContent;
 		}
+		public async Task<bool> Create(OrderServiceContent OrderServiceContent)
+		{
+			OrderServiceContentDAO OrderServiceContentDAO = new OrderServiceContentDAO();
 
-		private async Task SaveReference(OrderServiceContent orderServiceContent)
-		{ }
+			OrderServiceContentDAO.ServiceId = OrderServiceContent.ServiceId;
+			OrderServiceContentDAO.OrderServiceId = OrderServiceContent.OrderServiceId;
+			OrderServiceContentDAO.UnitOfMeasureId = OrderServiceContent.UnitOfMeasureId;
+			OrderServiceContentDAO.PrimaryUnitOfMeasureId = OrderServiceContent.PrimaryUnitOfMeasureId;
+			OrderServiceContentDAO.Quantity = OrderServiceContent.Quantity;
+			OrderServiceContentDAO.RequestQuantity = OrderServiceContent.RequestQuantity;
+			OrderServiceContentDAO.Price = OrderServiceContent.Price;
+			OrderServiceContentDAO.Amount = OrderServiceContent.Amount;
+			OrderServiceContentDAO.CreatedAt = DateTime.Now;
+			OrderServiceContentDAO.UpdatedAt = DateTime.Now;
+
+			DataContext.OrderServiceContent.Add(OrderServiceContentDAO);
+			await DataContext.SaveChangesAsync();
+			return true;
+		}
+		public async Task<bool> Update(OrderServiceContent OrderServiceContent)
+		{
+			OrderServiceContentDAO OrderServiceContentDAO = DataContext.OrderServiceContent.Where(x => x.Id == OrderServiceContent.Id).FirstOrDefault();
+			if (OrderServiceContentDAO == null)
+				return false;
+			OrderServiceContentDAO.ServiceId = OrderServiceContent.ServiceId;
+			OrderServiceContentDAO.OrderServiceId = OrderServiceContent.OrderServiceId;
+			OrderServiceContentDAO.UnitOfMeasureId = OrderServiceContent.UnitOfMeasureId;
+			OrderServiceContentDAO.PrimaryUnitOfMeasureId = OrderServiceContent.PrimaryUnitOfMeasureId;
+			OrderServiceContentDAO.Quantity = OrderServiceContent.Quantity;
+			OrderServiceContentDAO.RequestQuantity = OrderServiceContent.RequestQuantity;
+			OrderServiceContentDAO.Price = OrderServiceContent.Price;
+			OrderServiceContentDAO.Amount = OrderServiceContent.Amount;
+			OrderServiceContentDAO.UpdatedAt = DateTime.Now;
+
+			await DataContext.SaveChangesAsync();
+			return true;
+		}
 	}
 }
