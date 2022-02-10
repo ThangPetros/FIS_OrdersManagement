@@ -14,7 +14,7 @@ using TrueSight.Common;
 
 namespace SampleProject.Tests
 {
-	//[TestFixture]
+	[TestFixture]
 	public class UnitOfMeasureRepoTest : CommonTests
 	{
 		IUnitOfMeasureRepository repository;
@@ -23,7 +23,6 @@ namespace SampleProject.Tests
 
 		public UnitOfMeasureRepoTest() : base()
 		{
-
 		}
 		
 
@@ -64,6 +63,7 @@ namespace SampleProject.Tests
 		//[Test]
 		public async Task UnitOfMeasure_Create_ReturnTrue()
 		{
+			DataContext.SaveChanges();
 			// Create Instance
 			await uow.UnitOfMeasureRepository.Create(Input);
 
@@ -90,7 +90,7 @@ namespace SampleProject.Tests
 				Id = UpdateData.Id,
 				Code = "THUNG",
 				Name = "Thùng",
-				StatusId = 2,
+				StatusId = 1,
 				CreatedAt = UpdateData.CreatedAt,
 				UpdatedAt = DateTime.Now,
 				Used = true,
@@ -110,15 +110,29 @@ namespace SampleProject.Tests
 		public async Task UnitOfMeasure_Delete_ReturnTrue()
 		{
 			// Create Instance
-			await uow.UnitOfMeasureRepository.Create(Input);
+			await repository.Create(Input);
 
 			// Delete
-			await uow.UnitOfMeasureRepository.Delete(Input);
-
-			//Assert
-			Assert.IsNotNull(Input.DeletedAt);
+			var DeleteData = DataContext.UnitOfMeasure.SingleOrDefault(x => x.Id == 1);
+			await repository.Delete(ConvertDAOToEntity(DeleteData));
+			// Assert
+			var Output = await repository.Get(1);//DataContext.OrderService.SingleOrDefault(x => x.Id == 1);
+			Assert.IsNotNull(Output.DeletedAt);
 		}
-
+		public UnitOfMeasure ConvertDAOToEntity(UnitOfMeasureDAO UnitOfMeasureDAO)
+		{
+			return new UnitOfMeasure
+			{
+				Id = UnitOfMeasureDAO.Id,
+				Code = UnitOfMeasureDAO.Code,
+				Name = UnitOfMeasureDAO.Name,
+				StatusId = UnitOfMeasureDAO.StatusId,
+				CreatedAt = UnitOfMeasureDAO.CreatedAt,
+				UpdatedAt = UnitOfMeasureDAO.UpdatedAt,
+				DeletedAt = UnitOfMeasureDAO.DeletedAt,
+				Used = UnitOfMeasureDAO.Used,
+			};
+		}
 		//List Order By Name + Skip and Take
 		//[Test]
 		public async Task UnitOfMeasure_GetListByName_ReturnTrue()

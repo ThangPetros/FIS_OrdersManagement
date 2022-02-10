@@ -223,8 +223,8 @@ namespace SampleProject.Repositories
 			ServiceDAO.UnitOfMeasureId = Service.UnitOfMeasureId;
 			ServiceDAO.Price = Service.Price;
 			ServiceDAO.StatusId = Service.StatusId;
-			ServiceDAO.CreatedAt = DateTime.Now;//StaticParams.DateTimeNow;
-			ServiceDAO.UpdatedAt = DateTime.Now;//StaticParams.DateTimeNow;
+			ServiceDAO.CreatedAt = Service.CreatedAt;//StaticParams.DateTimeNow;
+			ServiceDAO.UpdatedAt = Service.UpdatedAt;//StaticParams.DateTimeNow;
 			ServiceDAO.Used = false;
 
 			DataContext.Service.Add(ServiceDAO);
@@ -251,9 +251,7 @@ namespace SampleProject.Repositories
 		}
 		public async Task<bool> Delete(Service Service)
 		{
-			Service.DeletedAt = DateTime.Now;
-			await Update(Service);
-			//await DataContext.Service.Where(x => x.Id == Service.Id).UpdateFromQueryAsync(x => new ServiceDAO { DeletedAt = DateTime.Now });
+			await DataContext.Service.Where(x => x.Id == Service.Id).UpdateFromQueryAsync(x => new ServiceDAO { DeletedAt = DateTime.Now });
 			return true;
 		}
 		public async Task<bool> BulkMerge(List<Service> Services)

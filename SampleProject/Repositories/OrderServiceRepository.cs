@@ -186,9 +186,10 @@ namespace SampleProject.Repositories
 
 			OrderServiceDAO.Code = OrderService.Code;
 			OrderServiceDAO.OrderDate = OrderService.OrderDate;
+			OrderServiceDAO.CustomerId = OrderService.CustomerId;
 			OrderServiceDAO.Total = OrderService.Total;
-			OrderServiceDAO.CreatedAt = DateTime.Now;//StaticParams.DateTimeNow;
-			OrderServiceDAO.UpdatedAt = DateTime.Now;//StaticParams.DateTimeNow;
+			OrderServiceDAO.CreatedAt = OrderService.CreatedAt;//StaticParams.DateTimeNow;
+			OrderServiceDAO.UpdatedAt = OrderService.UpdatedAt;//StaticParams.DateTimeNow;
 			OrderServiceDAO.Used = false;
 
 			DataContext.OrderService.Add(OrderServiceDAO);
@@ -204,6 +205,7 @@ namespace SampleProject.Repositories
 
 			OrderServiceDAO.Code = OrderService.Code;
 			OrderServiceDAO.OrderDate = OrderService.OrderDate;
+			OrderServiceDAO.CustomerId = OrderService.CustomerId;
 			OrderServiceDAO.Total = OrderService.Total;
 			OrderServiceDAO.UpdatedAt = OrderService.UpdatedAt;
 			OrderServiceDAO.Used = OrderService.Used;
@@ -213,9 +215,13 @@ namespace SampleProject.Repositories
 		}
 		public async Task<bool> Delete(OrderService OrderService)
 		{
-			OrderService.DeletedAt = DateTime.Now;
-			await Update(OrderService);
-			//await DataContext.OrderService.Where(x => x.Id == OrderService.Id).UpdateFromQueryAsync(x => new OrderServiceDAO { DeletedAt = DateTime.Now });
+			/*OrderServiceDAO OrderServiceDAO = DataContext.OrderService.Where(x => x.Id == OrderService.Id).FirstOrDefault();
+			if (OrderServiceDAO == null)
+				return false;
+			OrderServiceDAO.DeletedAt = DateTime.Now;
+			await DataContext.SaveChangesAsync();*/
+
+			await DataContext.OrderService.Where(x => x.Id == OrderService.Id).UpdateFromQueryAsync(x => new OrderServiceDAO { DeletedAt = DateTime.Now });
 			return true;
 		}
 		public async Task<bool> BulkMerge(List<OrderService> OrderServices)
