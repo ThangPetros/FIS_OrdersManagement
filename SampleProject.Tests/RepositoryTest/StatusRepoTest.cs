@@ -30,14 +30,12 @@ namespace SampleProject.Tests.RepositoryTest
 
             st1 = new StatusDAO
             {
-                Id = 1,
                 Code = "ACTIVE",
                 Name = "Hoạt động",
             };
 
             st2 = new StatusDAO
             {
-                Id = 2,
                 Code = "INACTIVE",
                 Name = "Dừng hoạt động",
             };
