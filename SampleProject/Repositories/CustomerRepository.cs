@@ -20,6 +20,7 @@ namespace SampleProject.Repositories
 		Task<bool> Update(Customer Customer);
 		Task<bool> Delete(Customer Customer);
 		Task<bool> BulkMerge(List<Customer> Customers);
+		Task<bool> BulkInsert(List<Customer> Customers);
 		Task<bool> BulkDelete(List<Customer> Customers);
 		Task<bool> Used(List<long> Ids);
 	}
@@ -269,6 +270,14 @@ namespace SampleProject.Repositories
 				CustomerDAOs.Add(CustomerDAO);
 			}
 			await DataContext.BulkMergeAsync(CustomerDAOs);
+			return true;
+		}
+		public async Task<bool> BulkInsert(List<Customer> Customers)
+		{
+			foreach (Customer Customer in Customers)
+			{
+				await Create(Customer);
+			}
 			return true;
 		}
 		public async Task<bool> BulkDelete(List<Customer> Customers)
