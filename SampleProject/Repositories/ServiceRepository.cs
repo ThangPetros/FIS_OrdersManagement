@@ -223,8 +223,8 @@ namespace SampleProject.Repositories
 			ServiceDAO.UnitOfMeasureId = Service.UnitOfMeasureId;
 			ServiceDAO.Price = Service.Price;
 			ServiceDAO.StatusId = Service.StatusId;
-			ServiceDAO.CreatedAt = DateTime.Now;//StaticParams.DateTimeNow;
-			ServiceDAO.UpdatedAt = DateTime.Now;//StaticParams.DateTimeNow;
+			ServiceDAO.CreatedAt = Service.CreatedAt;//StaticParams.DateTimeNow;
+			ServiceDAO.UpdatedAt = Service.UpdatedAt;//StaticParams.DateTimeNow;
 			ServiceDAO.Used = false;
 
 			DataContext.Service.Add(ServiceDAO);
