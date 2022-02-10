@@ -14,7 +14,7 @@ using TrueSight.Common;
 
 namespace SampleProject.Tests
 {
-	//[TestFixture]
+	[TestFixture]
 	public class UnitOfMeasureRepoTest : CommonTests
 	{
 		IUnitOfMeasureRepository repository;
@@ -23,7 +23,6 @@ namespace SampleProject.Tests
 
 		public UnitOfMeasureRepoTest() : base()
 		{
-
 		}
 		
 
@@ -64,6 +63,7 @@ namespace SampleProject.Tests
 		//[Test]
 		public async Task UnitOfMeasure_Create_ReturnTrue()
 		{
+			DataContext.SaveChanges();
 			// Create Instance
 			await uow.UnitOfMeasureRepository.Create(Input);
 
@@ -90,7 +90,7 @@ namespace SampleProject.Tests
 				Id = UpdateData.Id,
 				Code = "THUNG",
 				Name = "Thùng",
-				StatusId = 2,
+				StatusId = 1,
 				CreatedAt = UpdateData.CreatedAt,
 				UpdatedAt = DateTime.Now,
 				Used = true,
@@ -106,7 +106,7 @@ namespace SampleProject.Tests
 			Assert.AreEqual(Input.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 		}
 		//Delete
-		[Test]
+		//[Test]
 		public async Task UnitOfMeasure_Delete_ReturnTrue()
 		{
 			// Create Instance
