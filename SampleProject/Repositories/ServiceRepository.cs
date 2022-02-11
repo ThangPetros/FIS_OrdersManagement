@@ -229,6 +229,7 @@ namespace SampleProject.Repositories
 
 			DataContext.Service.Add(ServiceDAO);
 			await DataContext.SaveChangesAsync();
+			Service.Id = ServiceDAO.Id;
 			return true;
 		}
 

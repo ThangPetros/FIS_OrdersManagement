@@ -194,6 +194,7 @@ namespace SampleProject.Repositories
 
 			DataContext.OrderService.Add(OrderServiceDAO);
 			await DataContext.SaveChangesAsync();
+			OrderService.Id = OrderServiceDAO.Id;
 			return true;
 		}
 
@@ -215,12 +216,6 @@ namespace SampleProject.Repositories
 		}
 		public async Task<bool> Delete(OrderService OrderService)
 		{
-			/*OrderServiceDAO OrderServiceDAO = DataContext.OrderService.Where(x => x.Id == OrderService.Id).FirstOrDefault();
-			if (OrderServiceDAO == null)
-				return false;
-			OrderServiceDAO.DeletedAt = DateTime.Now;
-			await DataContext.SaveChangesAsync();*/
-
 			await DataContext.OrderService.Where(x => x.Id == OrderService.Id).UpdateFromQueryAsync(x => new OrderServiceDAO { DeletedAt = DateTime.Now });
 			return true;
 		}
@@ -256,7 +251,5 @@ namespace SampleProject.Repositories
 		    .UpdateFromQueryAsync(x => new OrderServiceDAO { Used = true });
 			return true;
 		}
-		private async Task SaveReference(OrderService orderService)
-		{ }
 	}
 }

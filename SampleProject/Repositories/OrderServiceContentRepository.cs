@@ -220,6 +220,7 @@ namespace SampleProject.Repositories
 
 			DataContext.OrderServiceContent.Add(OrderServiceContentDAO);
 			await DataContext.SaveChangesAsync();
+			OrderServiceContent.Id = OrderServiceContentDAO.Id;
 			return true;
 		}
 		public async Task<bool> Update(OrderServiceContent OrderServiceContent)
