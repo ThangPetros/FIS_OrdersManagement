@@ -15,7 +15,6 @@ using TrueSight.Common;
 namespace SampleProject.Tests.RepositoryTest
 {
 	[TestFixture]
-
 	public class OrderServiceRepoTest : CommonTests
 	{
 		IOrderServiceRepository repository;
@@ -30,6 +29,7 @@ namespace SampleProject.Tests.RepositoryTest
 		[SetUp]
 		public async Task Setup()
 		{
+			Initialize();
 			await Clean();
 			repository = new OrderServiceRepository(DataContext);
 			#region Setup Status + Customer
@@ -85,14 +85,14 @@ namespace SampleProject.Tests.RepositoryTest
 		}
 
 		// Create
-		//[Test]
+		[Test]
 		public async Task OrderService_Create_ReturnTrue()
 		{
 			// Create Instance
 			await repository.Create(Input);
 
 			// Assert
-			var Output = DataContext.OrderService.Where(x => x.Id == 1).FirstOrDefault();
+			var Output = DataContext.OrderService.Find(Input.Id);
 			Assert.AreEqual(Input.Code, Output.Code);
 			Assert.AreEqual(Input.OrderDate, Output.OrderDate);
 			Assert.AreEqual(Input.CustomerId, Output.CustomerId);
@@ -103,14 +103,14 @@ namespace SampleProject.Tests.RepositoryTest
 		}
 
 		// Update
-		//[Test]
+		[Test]
 		public async Task OrderService_Update_ReturnTrue()
 		{
 			// Create Instance
 			await repository.Create(Input);
 
 			// Update
-			var UpdateData = DataContext.OrderService.SingleOrDefault(x => x.Id == 1);
+			var UpdateData = DataContext.OrderService.Find(Input.Id);
 			Input = new OrderService
 			{
 				Id = UpdateData.Id,
@@ -123,7 +123,7 @@ namespace SampleProject.Tests.RepositoryTest
 			};
 			await repository.Update(Input);
 			// Assert
-			var Output = DataContext.OrderService.Where(x => x.Id == 1).FirstOrDefault();
+			var Output = DataContext.OrderService.Find(Input.Id);
 			Assert.AreEqual(Input.Code, Output.Code);
 			Assert.AreEqual(Input.OrderDate, Output.OrderDate);
 			Assert.AreEqual(Input.CustomerId, Output.CustomerId);
@@ -139,30 +139,15 @@ namespace SampleProject.Tests.RepositoryTest
 			await repository.Create(Input);
 
 			// Delete
-			var DeleteData = DataContext.OrderService.SingleOrDefault(x => x.Id == 1);
-			await repository.Delete(ConvertDAOToEntity(DeleteData));
+			await repository.Delete(Input);
+			Initialize();
 			// Assert
-			var Output = await repository.Get(1);//DataContext.OrderService.SingleOrDefault(x => x.Id == 1);
+			var Output = DataContext.OrderService.Find(Input.Id);
 			Assert.IsNotNull(Output.DeletedAt);
 		}
-		public OrderService ConvertDAOToEntity(OrderServiceDAO OrderServiceDAO)
-		{
-			return new OrderService
-			{
-				Id = OrderServiceDAO.Id,
-				Code = OrderServiceDAO.Code,
-				OrderDate = OrderServiceDAO.OrderDate,
-				CustomerId = OrderServiceDAO.CustomerId,
-				Total = OrderServiceDAO.Total,
-				CreatedAt = OrderServiceDAO.CreatedAt,
-				UpdatedAt = OrderServiceDAO.UpdatedAt,
-				DeletedAt = OrderServiceDAO.DeletedAt,
-				Used = OrderServiceDAO.Used,
-			};
-		}
-
+		
 		//List Order By Name + Skip and Take
-		//[Test]
+		[Test]
 		public async Task OrderService_GetListByName_ReturnTrue()
 		{
 			// Create Instance
@@ -185,16 +170,16 @@ namespace SampleProject.Tests.RepositoryTest
 		}
 
 		// Bulk Insert
-		//[Test]
+		[Test]
 		public async Task OrderService_BulkDelete_ReturnTrue()
 		{
-			List<OrderService> OrderService = new List<OrderService>();
-			OrderService.Add(Input);
-			OrderService.Add(Input);
-			OrderService.Add(Input);
-			await repository.BulkDelete(OrderService);
+			List<OrderService> OrderServices = new List<OrderService>();
+			OrderServices.Add(Input);
+			OrderServices.Add(Input);
+			OrderServices.Add(Input);
+			await repository.BulkDelete(OrderServices);
 
-			Assert.IsNotNull(OrderService);
+			Assert.IsNotNull(OrderServices);
 		}
 	}
 }

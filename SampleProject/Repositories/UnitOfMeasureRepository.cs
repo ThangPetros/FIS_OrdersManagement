@@ -221,6 +221,7 @@ namespace SampleProject.Repositories
 
 			DataContext.UnitOfMeasure.Add(UnitOfMeasureDAO);
 			await DataContext.SaveChangesAsync();
+			UnitOfMeasure.Id = UnitOfMeasureDAO.Id;
 			return true;
 		}
 
