@@ -18,7 +18,7 @@ namespace SampleProject.Models
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
-        public bool? Used { get; set; }
+        public bool Used { get; set; }
 
         public virtual CustomerDAO Customer { get; set; }
         public virtual ICollection<OrderServiceContentDAO> OrderServiceContents { get; set; }
