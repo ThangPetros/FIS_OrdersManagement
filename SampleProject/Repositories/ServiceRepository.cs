@@ -229,6 +229,7 @@ namespace SampleProject.Repositories
 
 			DataContext.Service.Add(ServiceDAO);
 			await DataContext.SaveChangesAsync();
+			Service.Id = ServiceDAO.Id;
 			return true;
 		}
 
@@ -251,9 +252,7 @@ namespace SampleProject.Repositories
 		}
 		public async Task<bool> Delete(Service Service)
 		{
-			Service.DeletedAt = DateTime.Now;
-			await Update(Service);
-			//await DataContext.Service.Where(x => x.Id == Service.Id).UpdateFromQueryAsync(x => new ServiceDAO { DeletedAt = DateTime.Now });
+			await DataContext.Service.Where(x => x.Id == Service.Id).UpdateFromQueryAsync(x => new ServiceDAO { DeletedAt = DateTime.Now });
 			return true;
 		}
 		public async Task<bool> BulkMerge(List<Service> Services)

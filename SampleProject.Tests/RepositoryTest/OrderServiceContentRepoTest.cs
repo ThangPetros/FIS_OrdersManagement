@@ -15,11 +15,9 @@ using TrueSight.Common;
 namespace SampleProject.Tests.RepositoryTest
 {
 	[TestFixture]
-
 	public class OrderServiceContentRepoTest : CommonTests
 	{
 		IOrderServiceContentRepository repository;
-		IUOW uow;
 		OrderServiceContent Input;
 
 		public OrderServiceContentRepoTest() : base()
@@ -31,9 +29,9 @@ namespace SampleProject.Tests.RepositoryTest
 		[SetUp]
 		public async Task Setup()
 		{
+			Initialize();
 			await Clean();
-            repository = new OrderServiceContentRepository(DataContext);
-			uow = new UOW(DataContext);
+			repository = new OrderServiceContentRepository(DataContext);
 
 			#region Setup UnitOfMeasure + Service + OrderService
 			// Setup UnitOfMeasure
@@ -113,7 +111,7 @@ namespace SampleProject.Tests.RepositoryTest
 			{
 				ServiceId = 1,
 				OrderServiceId = 1,
-				PrimaryUnitOfMeasureId=1,
+				PrimaryUnitOfMeasureId = 1,
 				UnitOfMeasureId = 1,
 				Quantity = 100,
 				RequestQuantity = 100,
@@ -125,14 +123,14 @@ namespace SampleProject.Tests.RepositoryTest
 		}
 
 		// Create
-		//[Test]
+		[Test]
 		public async Task OrderServiceContent_Create_ReturnTrue()
 		{
 			// Create Instance
 			await repository.Create(Input);
 
 			// Assert
-			var Output = DataContext.OrderServiceContent.Where(x => x.Id == 1).FirstOrDefault();
+			var Output = DataContext.OrderServiceContent.Find(Input.Id);
 			Assert.AreEqual(Input.ServiceId, Output.ServiceId);
 			Assert.AreEqual(Input.OrderServiceId, Output.OrderServiceId);
 			Assert.AreEqual(Input.PrimaryUnitOfMeasureId, Output.PrimaryUnitOfMeasureId);
@@ -145,42 +143,40 @@ namespace SampleProject.Tests.RepositoryTest
 			Assert.AreEqual(Input.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 		}
 
-        // Update
-        [Test]
-        public async Task OrderServiceContent_Update_ReturnTrue()
-        {
-            // Create Instance
-            await repository.Create(Input);
+		// Update
+		[Test]
+		public async Task OrderServiceContent_Update_ReturnTrue()
+		{
+			// Create Instance
+			await repository.Create(Input);
 
-            // Update
-            var UpdateData = DataContext.OrderServiceContent.SingleOrDefault(x => x.Id == 1);
-            Input = new OrderServiceContent
+			// Update
+			var UpdateData = DataContext.OrderServiceContent.Find(Input.Id);
+			Input = new OrderServiceContent
 			{
 				Id = UpdateData.Id,
 				ServiceId = UpdateData.ServiceId,
 				OrderServiceId = 1,
-				PrimaryUnitOfMeasureId=1,
+				PrimaryUnitOfMeasureId = 1,
 				UnitOfMeasureId = 1,
 				Quantity = 150,
 				RequestQuantity = 100,
 				Price = 200,
 				Amount = 200,
-				CreatedAt = UpdateData.CreatedAt,
 				UpdatedAt = UpdateData.CreatedAt
 			};
-            await repository.Update(Input);
+			await repository.Update(Input);
 			// Assert
-			var Output = DataContext.OrderServiceContent.Where(x => x.Id == 1).FirstOrDefault();
-            Assert.AreEqual(Input.ServiceId, Output.ServiceId);
-            Assert.AreEqual(Input.OrderServiceId, Output.OrderServiceId);
+			var Output = DataContext.OrderServiceContent.Find(Input.Id);
+			Assert.AreEqual(Input.ServiceId, Output.ServiceId);
+			Assert.AreEqual(Input.OrderServiceId, Output.OrderServiceId);
 			Assert.AreEqual(Input.PrimaryUnitOfMeasureId, Output.PrimaryUnitOfMeasureId);
 			Assert.AreEqual(Input.UnitOfMeasureId, Output.UnitOfMeasureId);
 			Assert.AreEqual(Input.Quantity, Output.Quantity);
 			Assert.AreEqual(Input.RequestQuantity, Output.RequestQuantity);
 			Assert.AreEqual(Input.Price, Output.Price);
 			Assert.AreEqual(Input.Amount, Output.Amount);
-			Assert.AreEqual(Input.CreatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.CreatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 			Assert.AreEqual(Input.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 		}
-    }
+	}
 }

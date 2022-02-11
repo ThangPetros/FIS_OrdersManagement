@@ -221,6 +221,7 @@ namespace SampleProject.Repositories
 
 			DataContext.UnitOfMeasure.Add(UnitOfMeasureDAO);
 			await DataContext.SaveChangesAsync();
+			UnitOfMeasure.Id = UnitOfMeasureDAO.Id;
 			return true;
 		}
 
@@ -242,9 +243,7 @@ namespace SampleProject.Repositories
 
 		public async Task<bool> Delete(UnitOfMeasure UnitOfMeasure)
 		{
-			UnitOfMeasure.DeletedAt = DateTime.Now;
-			await Update(UnitOfMeasure);
-			//await DataContext.UnitOfMeasure.Where(x => x.Id == UnitOfMeasure.Id).UpdateFromQueryAsync(x => new UnitOfMeasureDAO { DeletedAt = DateTime.Now });
+			await DataContext.UnitOfMeasure.Where(x => x.Id == UnitOfMeasure.Id).UpdateFromQueryAsync(x => new UnitOfMeasureDAO { DeletedAt = DateTime.Now });
 			return true;
 		}
 

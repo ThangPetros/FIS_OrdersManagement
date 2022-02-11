@@ -15,7 +15,6 @@ using TrueSight.Common;
 namespace SampleProject.Tests.RepositoryTest
 {
 	[TestFixture]
-
 	public class OrderServiceRepoTest : CommonTests
 	{
 		IOrderServiceRepository repository;
@@ -30,6 +29,7 @@ namespace SampleProject.Tests.RepositoryTest
 		[SetUp]
 		public async Task Setup()
 		{
+			Initialize();
 			await Clean();
 			repository = new OrderServiceRepository(DataContext);
 			#region Setup Status + Customer
@@ -85,14 +85,14 @@ namespace SampleProject.Tests.RepositoryTest
 		}
 
 		// Create
-		//[Test]
+		[Test]
 		public async Task OrderService_Create_ReturnTrue()
 		{
 			// Create Instance
 			await repository.Create(Input);
-			
+
 			// Assert
-			var Output = DataContext.OrderService.Where(x => x.Id == 1).FirstOrDefault();
+			var Output = DataContext.OrderService.Find(Input.Id);
 			Assert.AreEqual(Input.Code, Output.Code);
 			Assert.AreEqual(Input.OrderDate, Output.OrderDate);
 			Assert.AreEqual(Input.CustomerId, Output.CustomerId);
@@ -102,86 +102,84 @@ namespace SampleProject.Tests.RepositoryTest
 			Assert.AreEqual(Input.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 		}
 
-        // Update
-        //[Test]
-        public async Task OrderService_Update_ReturnTrue()
-        {
-            // Create Instance
-            await repository.Create(Input);
+		// Update
+		[Test]
+		public async Task OrderService_Update_ReturnTrue()
+		{
+			// Create Instance
+			await repository.Create(Input);
 
-            // Update
-            var UpdateData = DataContext.OrderService.SingleOrDefault(x => x.Code == Input.Code);
-            Input = new OrderService
-            {
-                Id = UpdateData.Id,
+			// Update
+			var UpdateData = DataContext.OrderService.Find(Input.Id);
+			Input = new OrderService
+			{
+				Id = UpdateData.Id,
 				Code = "Quan ao",
 				OrderDate = DateTime.Now,
 				CustomerId = 1,
 				Total = 900,
-				CreatedAt = UpdateData.CreatedAt,
 				UpdatedAt = DateTime.Now,
 				Used = false
 			};
-            await repository.Update(Input);
+			await repository.Update(Input);
 			// Assert
-			var Output = DataContext.OrderService.Where(x => x.Id == 1).FirstOrDefault();
+			var Output = DataContext.OrderService.Find(Input.Id);
 			Assert.AreEqual(Input.Code, Output.Code);
 			Assert.AreEqual(Input.OrderDate, Output.OrderDate);
 			Assert.AreEqual(Input.CustomerId, Output.CustomerId);
 			Assert.AreEqual(Input.Total, Output.Total);
-			Assert.AreEqual(Input.Used, Output.Used);
-			Assert.AreEqual(Input.CreatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.CreatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 			Assert.AreEqual(Input.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 		}
 
-        // Delete
-        //[Test]
-        public async Task OrderService_Delete_ReturnTrue()
-        {
-            // Create Instance
-            await repository.Create(Input);
+		// Delete
+		[Test]
+		public async Task OrderService_Delete_ReturnTrue()
+		{
+			// Create Instance
+			await repository.Create(Input);
 
-            // Delete
-            await repository.Delete(Input);
-
-            // Assert
-            Assert.IsNotNull(Input.DeletedAt);
-        }
-
-        //List Order By Name + Skip and Take
-        //[Test]
-        public async Task OrderService_GetListByName_ReturnTrue()
-        {
-            // Create Instance
-            await repository.Create(Input);
-            await repository.Create(Input);
-
-            string Code = "Trang phuc";
-            OrderServiceFilter OrderServiceFilter = new OrderServiceFilter
-			{
-                Skip = 0,
-                Take = 10,
-                Code = new StringFilter { Equal = Code },
-                Selects = OrderServiceSelect.Code
-            };
-
-            int count = await repository.Count(OrderServiceFilter);
-
-            // Assert
-            Assert.AreEqual(2, count);
-        }
-
-        // Bulk Insert
-        //[Test]
-        public async Task OrderService_BulkDelete_ReturnTrue()
-        {
-            List<OrderService> OrderService = new List<OrderService>();
-			OrderService.Add(Input);
-			OrderService.Add(Input);
-			OrderService.Add(Input);
-            await repository.BulkDelete(OrderService);
-
-			Assert.IsNotNull(OrderService);
+			// Delete
+			await repository.Delete(Input);
+			Initialize();
+			// Assert
+			var Output = DataContext.OrderService.Find(Input.Id);
+			Assert.IsNotNull(Output.DeletedAt);
 		}
-    }
+		
+		//List Order By Name + Skip and Take
+		[Test]
+		public async Task OrderService_GetListByName_ReturnTrue()
+		{
+			// Create Instance
+			await repository.Create(Input);
+			await repository.Create(Input);
+
+			string Code = "Trang phuc";
+			OrderServiceFilter OrderServiceFilter = new OrderServiceFilter
+			{
+				Skip = 0,
+				Take = 10,
+				Code = new StringFilter { Equal = Code },
+				Selects = OrderServiceSelect.Code
+			};
+
+			int count = await repository.Count(OrderServiceFilter);
+
+			// Assert
+			Assert.AreEqual(2, count);
+		}
+
+		// Bulk Insert
+		[Test]
+		public async Task OrderService_BulkDelete_ReturnTrue()
+		{
+			List<OrderService> OrderServices = new List<OrderService>();
+			OrderServices.Add(Input);
+			OrderServices.Add(Input);
+			OrderServices.Add(Input);
+			await repository.BulkDelete(OrderServices);
+
+			Assert.IsNotNull(OrderServices);
+		}
+	}
 }
