@@ -17,19 +17,7 @@ namespace SampleProject.Tests
 		protected DataContext DataContext;
 		protected ServiceProvider provider;
 		public CommonTests()
-		{
-			/*_ = License.EfExtension;
-
-			var config = new ConfigurationBuilder()
-			   .AddJsonFile("appsettings.json")
-			   .Build();
-			string connectionString = config.GetConnectionString("DataContext");
-			var options = new DbContextOptionsBuilder<DataContext>()
-			    .UseSqlServer(connectionString)
-			    .Options;
-			DataContext = new DataContext(options);
-			EntityFrameworkManager.ContextFactory = DbContext => new DataContext(options);*/
-		}
+		{}
 		public void Init()
 		{
 			_ = License.EfExtension;
