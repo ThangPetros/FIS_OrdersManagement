@@ -24,14 +24,14 @@ namespace SampleProject.Tests
 		public UnitOfMeasureRepoTest() : base()
 		{
 		}
-		
 
 		[SetUp]
 		public async Task Setup()
 		{
+			Initialize();
 			await Clean();
+
 			repository = new UnitOfMeasureRepository(DataContext);
-			uow = new UOW(DataContext);
 			//Business Group
 			DataContext.Status.Add(new StatusDAO
 			{
@@ -60,12 +60,11 @@ namespace SampleProject.Tests
 		}
 
 		//Create
-		//[Test]
+		[Test]
 		public async Task UnitOfMeasure_Create_ReturnTrue()
 		{
-			DataContext.SaveChanges();
 			// Create Instance
-			await uow.UnitOfMeasureRepository.Create(Input);
+			await repository.Create(Input);
 
 			// Assert
 			var Output = DataContext.UnitOfMeasure.Where(x => x.Id == 1).FirstOrDefault();
@@ -77,15 +76,15 @@ namespace SampleProject.Tests
 			Assert.AreEqual(Input.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 		}
 		//Update
-		//[Test]
+		[Test]
 		public async Task UnitOfMeasure_Update_ReturnTrue()
 		{
 			// Create Instance
-			await uow.UnitOfMeasureRepository.Create(Input);
+			await repository.Create(Input);
 
 			// Update
-			var UpdateData = DataContext.UnitOfMeasure.SingleOrDefault(x => x.Code == Input.Code);
-			Input = new UnitOfMeasure
+			var UpdateData = DataContext.UnitOfMeasure.SingleOrDefault(x => x.Id==Input.Id);
+			 Input = new UnitOfMeasure
 			{
 				Id = UpdateData.Id,
 				Code = "THUNG",
@@ -95,7 +94,7 @@ namespace SampleProject.Tests
 				UpdatedAt = DateTime.Now,
 				Used = true,
 			};
-			await uow.UnitOfMeasureRepository.Update(Input);
+			await repository.Update(Input);
 
 			//Assert
 			var Output = DataContext.UnitOfMeasure.Find(Input.Id);
@@ -106,27 +105,28 @@ namespace SampleProject.Tests
 			Assert.AreEqual(Input.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 		}
 		//Delete
-		//[Test]
+		[Test]
 		public async Task UnitOfMeasure_Delete_ReturnTrue()
 		{
 			// Create Instance
-			await uow.UnitOfMeasureRepository.Create(Input);
+			await repository.Create(Input);
 
 			// Delete
-			await uow.UnitOfMeasureRepository.Delete(Input);
-
-			//Assert
-			Assert.IsNotNull(Input.DeletedAt);
+			await repository.Delete(Input);
+			Initialize();
+			// Assert
+			var Output = DataContext.UnitOfMeasure.SingleOrDefault(x => x.Id == Input.Id);
+			Assert.IsNotNull(Output.DeletedAt);
 		}
-
+		
 		//List Order By Name + Skip and Take
 		//[Test]
 		public async Task UnitOfMeasure_GetListByName_ReturnTrue()
 		{
 			// Create Instance
-			await uow.UnitOfMeasureRepository.Create(Input);
-			await uow.UnitOfMeasureRepository.Create(Input);
-			await uow.UnitOfMeasureRepository.Create(Input);
+			await repository.Create(Input);
+			await repository.Create(Input);
+			await repository.Create(Input);
 
 			string Name = "Chiếc";
 

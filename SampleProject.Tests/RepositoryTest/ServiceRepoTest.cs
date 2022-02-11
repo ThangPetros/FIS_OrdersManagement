@@ -17,7 +17,6 @@ namespace SampleProject.Tests.RepositoryTest
 	public class ServiceRepoTest: CommonTests
 	{
 		IServiceRepository repository;
-		IUOW uow;
 		Service Input;
 		public ServiceRepoTest(): base() {
 		}
@@ -25,9 +24,9 @@ namespace SampleProject.Tests.RepositoryTest
 		[SetUp]
 		public async Task Setup()
 		{
+			Initialize();
 			await Clean();
 			repository = new ServiceRepository(DataContext);
-			uow = new UOW(DataContext);
 
 			#region Setup Status + UnitOfMeasure
 			// Setup Status
@@ -79,33 +78,33 @@ namespace SampleProject.Tests.RepositoryTest
 		}
 
 		// Create 
-		//[Test]
+		[Test]
 		public async Task Service_Create_ReturnTrue()
 		{
 			// Create Instance
-			await uow.ServiceRepository.Create(Input);
+			await repository.Create(Input);
 
 			// Assert
-			var Output = DataContext.Service.SingleOrDefault(x=>x.Id == 1);
+			var Output = DataContext.Service.SingleOrDefault(x=>x.Id == Input.Id);
 			Assert.IsNotNull(Output);
 			Assert.AreEqual(Input.Code, Output.Code);
 			Assert.AreEqual(Input.Name, Output.Name);
 			Assert.AreEqual(Input.Price, Output.Price);
 			Assert.AreEqual(Input.StatusId, Output.StatusId);
 			Assert.AreEqual(Input.UnitOfMeasureId, Output.UnitOfMeasureId);
-			Assert.AreEqual(Input.CreatedAt, Output.CreatedAt);
-			Assert.AreEqual(Input.UpdatedAt, Output.UpdatedAt);
+			Assert.AreEqual(Input.CreatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.CreatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
+			Assert.AreEqual(Input.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 		}
 
 		// Update 
-		//[Test]
+		[Test]
 		public async Task Service_Update_ReturnTrue()
 		{
 			// Create Instance
-			await uow.ServiceRepository.Create(Input);
+			await repository.Create(Input);
 
 			// Update
-			var UpdateData = DataContext.Service.SingleOrDefault(x => x.Id == 1);
+			var UpdateData = DataContext.Service.SingleOrDefault(x => x.Id == Input.Id);
 			Input = new Service
 			{
 				Id = UpdateData.Id,
@@ -118,18 +117,17 @@ namespace SampleProject.Tests.RepositoryTest
 				UpdatedAt = DateTime.Now,
 				Used = false
 			};
-			await uow.ServiceRepository.Update(Input);
+			await repository.Update(Input);
 
 			// Assert
-			var Output = DataContext.Service.SingleOrDefault(x => x.Id == 1);
+			var Output = DataContext.Service.SingleOrDefault(x => x.Id == Input.Id);
 			Assert.IsNotNull(Output);
 			Assert.AreEqual(Input.Code, Output.Code);
 			Assert.AreEqual(Input.Name, Output.Name);
 			Assert.AreEqual(Input.Price, Output.Price);
 			Assert.AreEqual(Input.StatusId, Output.StatusId);
 			Assert.AreEqual(Input.UnitOfMeasureId, Output.UnitOfMeasureId);
-			Assert.AreEqual(Input.CreatedAt, Output.CreatedAt);
-			Assert.AreEqual(Input.UpdatedAt, Output.UpdatedAt);
+			Assert.AreEqual(Input.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 		}
 
 		// Delete
@@ -137,13 +135,14 @@ namespace SampleProject.Tests.RepositoryTest
 		public async Task Service_Delete_ReturnTrue()
 		{
 			// Create Instance
-			await uow.ServiceRepository.Create(Input);
+			await repository.Create(Input);
 
 			// Delete
-			await uow.ServiceRepository.Delete(Input);
-
+			await repository.Delete(Input);
+			Initialize();
 			// Assert
-			Assert.IsNotNull(Input.DeletedAt);
+			var Output = DataContext.Service.Find(Input.Id);
+			Assert.IsNotNull(Output.DeletedAt);
 		}
 	}
 }

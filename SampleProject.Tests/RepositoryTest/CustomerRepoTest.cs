@@ -30,6 +30,7 @@ namespace SampleProject.Tests.RepositoryTest
 		[SetUp]
 		public async Task Setup()
 		{
+			Initialize();
 			await Clean();
 			repository = new CustomerRepository(DataContext);
 			//Business Group
@@ -62,14 +63,14 @@ namespace SampleProject.Tests.RepositoryTest
 		}
 		
 		// Create
-		//[Test]
+		[Test]
 		public async Task Customer_Create_ReturnTrue()
 		{
 			// Create Instance
 			await repository.Create(Input);
 
 			// Assert
-			var Output = DataContext.Customer.Where(x => x.Id == 1).FirstOrDefault();
+			var Output = DataContext.Customer.Find(Input.Id);
 			Assert.AreEqual(Input.Code, Output.Code);
 			Assert.AreEqual(Input.Name, Output.Name);
 			Assert.AreEqual(Input.Address, Output.Address);
@@ -81,14 +82,14 @@ namespace SampleProject.Tests.RepositoryTest
 		}
 
 		// Update
-		//[Test]
+		[Test]
 		public async Task Customer_Update_ReturnTrue()
 		{
 			// Create Instance
 			await repository.Create(Input);
 
 			// Update
-			var UpdateData = DataContext.Customer.SingleOrDefault(x => x.Code == Input.Code);
+			var UpdateData = DataContext.Customer.Find(Input.Id); ;
 			Input = new Customer
 			{
 				Id = UpdateData.Id,
@@ -103,19 +104,18 @@ namespace SampleProject.Tests.RepositoryTest
 			};
 			await repository.Update(Input);
 			// Assert
-			var Output = DataContext.Customer.Where(x => x.Id == Input.Id).FirstOrDefault();
+			var Output = DataContext.Customer.Find(Input.Id);
 			Assert.AreEqual(Input.Code, Output.Code);
 			Assert.AreEqual(Input.Name, Output.Name);
 			Assert.AreEqual(Input.Address, Output.Address);
 			Assert.AreEqual(Input.Phone, Output.Phone);
 			Assert.AreEqual(Input.StatusId, Output.StatusId);
 			Assert.AreEqual(Input.Used, Output.Used);
-			Assert.AreEqual(Input.CreatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.CreatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 			Assert.AreEqual(Input.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 		}
 
 		// Delete
-		//[Test]
+		[Test]
 		public async Task Customer_Delete_ReturnTrue()
 		{
 			// Create Instance
@@ -123,13 +123,13 @@ namespace SampleProject.Tests.RepositoryTest
 
 			// Delete
 			await repository.Delete(Input);
-
+			Initialize();
 			// Assert
-			Assert.IsNotNull(Input.DeletedAt);
+			var Output = DataContext.Customer.Find(Input.Id);
+			Assert.IsNotNull(Output.DeletedAt);
 		}
-
 		//List Order By Name + Skip and Take
-		//[Test]
+		[Test]
 		public async Task Customer_GetListByName_ReturnTrue()
 		{
 			// Create Instance
@@ -152,7 +152,7 @@ namespace SampleProject.Tests.RepositoryTest
 		}
 
 		// Bulk Insert
-		//[Test]
+		[Test]
 		public async Task Customer_BulkInsert_ReturnTrue()
 		{
 			List<Customer> Customers = new List<Customer>();
