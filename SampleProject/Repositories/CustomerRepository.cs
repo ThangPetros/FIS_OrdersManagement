@@ -228,6 +228,7 @@ namespace SampleProject.Repositories
 
 			DataContext.Customer.Add(CustomerDAO);
 			await DataContext.SaveChangesAsync();
+			Customer.Id = CustomerDAO.Id;
 			return true;
 		}
 
