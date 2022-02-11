@@ -224,6 +224,7 @@ namespace SampleProject.Repositories
             return true;
         }
 
+<<<<<<< HEAD
         public async Task<bool> Update(UnitOfMeasure UnitOfMeasure)
         {
             UnitOfMeasureDAO UnitOfMeasureDAO = DataContext.UnitOfMeasure.Where(x => x.Id == UnitOfMeasure.Id).FirstOrDefault();
@@ -238,6 +239,13 @@ namespace SampleProject.Repositories
             await SaveReference(UnitOfMeasure);
             return true;
         }
+=======
+			DataContext.UnitOfMeasure.Add(UnitOfMeasureDAO);
+			await DataContext.SaveChangesAsync();
+			UnitOfMeasure.Id = UnitOfMeasureDAO.Id;
+			return true;
+		}
+>>>>>>> develop
 
         public async Task<bool> Delete(UnitOfMeasure UnitOfMeasure)
         {
@@ -272,9 +280,17 @@ namespace SampleProject.Repositories
             return true;
         }
 
+<<<<<<< HEAD
         private async Task SaveReference(UnitOfMeasure UnitOfMeasure)
         {
         }
+=======
+		public async Task<bool> Delete(UnitOfMeasure UnitOfMeasure)
+		{
+			await DataContext.UnitOfMeasure.Where(x => x.Id == UnitOfMeasure.Id).UpdateFromQueryAsync(x => new UnitOfMeasureDAO { DeletedAt = DateTime.Now });
+			return true;
+		}
+>>>>>>> develop
 
         public async Task<bool> Used(List<long> Ids)
         {

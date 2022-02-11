@@ -14,48 +14,45 @@ using TrueSight.Common;
 
 namespace SampleProject.Tests.RepositoryTest
 {
-    [TestFixture]
-    public class UnitOfMeasureRepoTest : CommonTests
-    {
-        IStatusRepository repository;
-        IUOW uow;
-        StatusDAO st1, st2;
+	[TestFixture]
+	public class UnitOfMeasureRepoTest : CommonTests
+	{
+		IStatusRepository repository;
+		StatusDAO st1, st2;
 
-        [SetUp]
-        public async Task Setup()
-        {
-            await Clean();
-            repository = new StatusRepository(DataContext);
-            uow = new UOW(DataContext);
+		[SetUp]
+		public async Task Setup()
+		{
+			Initialize();
+			await Clean();
+			repository = new StatusRepository(DataContext);
 
-            st1 = new StatusDAO
-            {
-                Id = 1,
-                Code = "ACTIVE",
-                Name = "Hoạt động",
-            };
+			st1 = new StatusDAO
+			{
+				Code = "ACTIVE",
+				Name = "Hoạt động",
+			};
 
-            st2 = new StatusDAO
-            {
-                Id = 2,
-                Code = "INACTIVE",
-                Name = "Dừng hoạt động",
-            };
+			st2 = new StatusDAO
+			{
+				Code = "INACTIVE",
+				Name = "Dừng hoạt động",
+			};
 
-            DataContext.Status.Add(st1);
-            DataContext.Status.Add(st2);
+			DataContext.Status.Add(st1);
+			DataContext.Status.Add(st2);
 
-            DataContext.SaveChanges();
-        }
+			DataContext.SaveChanges();
+		}
 
-        [Test]
-        public async Task Status_GetById_ReturnTrue()
-        {
-            Status status = await uow.StatusRepository.Get(1);
+		[Test]
+		public async Task Status_GetById_ReturnTrue()
+		{
+			Status status = await repository.Get(1);
 
-            Assert.AreEqual(status.Id, st1.Id);
-            Assert.AreEqual(status.Code, st1.Code);
-            Assert.AreEqual(status.Name, st1.Name);
-        }
-    }
+			Assert.AreEqual(status.Id, st1.Id);
+			Assert.AreEqual(status.Code, st1.Code);
+			Assert.AreEqual(status.Name, st1.Name);
+		}
+	}
 }

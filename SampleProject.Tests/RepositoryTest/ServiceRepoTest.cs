@@ -11,18 +11,14 @@ using NUnit.Framework;
 using LightBDD.NUnit3;
 using LightBDD.Framework;
 using TrueSight.Common;
-
-namespace SampleProject.Tests
+namespace SampleProject.Tests.RepositoryTest
 {
 	[TestFixture]
-	public class UnitOfMeasureRepoTest : CommonTests
+	public class ServiceRepoTest: CommonTests
 	{
-		IUnitOfMeasureRepository repository;
-		IUOW uow;
-		UnitOfMeasure Input;
-
-		public UnitOfMeasureRepoTest() : base()
-		{
+		IServiceRepository repository;
+		Service Input;
+		public ServiceRepoTest(): base() {
 		}
 
 		[SetUp]
@@ -30,28 +26,50 @@ namespace SampleProject.Tests
 		{
 			Initialize();
 			await Clean();
+			repository = new ServiceRepository(DataContext);
 
-			repository = new UnitOfMeasureRepository(DataContext);
-			//Business Group
+			#region Setup Status + UnitOfMeasure
+			// Setup Status
 			DataContext.Status.Add(new StatusDAO
 			{
-				//Id = 1,
 				Code = "ACTIVE",
-				Name = "Hoạt động",
+				Name = "Đang hoạt động"
 			});
 			DataContext.Status.Add(new StatusDAO
 			{
-				//Id = 2,
 				Code = "INACTIVE",
-				Name = "Dừng hoạt động",
+				Name = "Không hoạt động"
 			});
-			DataContext.SaveChanges();
 
-			Input = new UnitOfMeasure
+			// Setup UnitOfMeasure
+			DataContext.UnitOfMeasure.Add(new UnitOfMeasureDAO
 			{
-				//Id = 1,
 				Code = "CHIEC",
 				Name = "Chiếc",
+				StatusId = 1,
+				CreatedAt = DateTime.Now,
+				UpdatedAt = DateTime.Now,
+				Used = false
+			});
+			DataContext.UnitOfMeasure.Add(new UnitOfMeasureDAO
+			{
+				Code = "BO",
+				Name = "Bộ",
+				StatusId = 1,
+				CreatedAt = DateTime.Now,
+				UpdatedAt = DateTime.Now,
+				Used = false
+			});
+			#endregion
+			DataContext.SaveChanges();
+
+			// Create an Instance Service
+			Input = new Service
+			{
+				Code = "Jean",
+				Name = "Quần Jean",
+				UnitOfMeasureId =1,
+				Price = 100000,
 				StatusId = 1,
 				CreatedAt = DateTime.Now,
 				UpdatedAt = DateTime.Now,
@@ -59,54 +77,62 @@ namespace SampleProject.Tests
 			};
 		}
 
-		//Create
+		// Create 
 		[Test]
-		public async Task UnitOfMeasure_Create_ReturnTrue()
+		public async Task Service_Create_ReturnTrue()
 		{
 			// Create Instance
 			await repository.Create(Input);
 
 			// Assert
-			var Output = DataContext.UnitOfMeasure.Where(x => x.Id == 1).FirstOrDefault();
+			var Output = DataContext.Service.SingleOrDefault(x=>x.Id == Input.Id);
+			Assert.IsNotNull(Output);
 			Assert.AreEqual(Input.Code, Output.Code);
 			Assert.AreEqual(Input.Name, Output.Name);
+			Assert.AreEqual(Input.Price, Output.Price);
 			Assert.AreEqual(Input.StatusId, Output.StatusId);
-			Assert.AreEqual(Input.Used, Output.Used);
+			Assert.AreEqual(Input.UnitOfMeasureId, Output.UnitOfMeasureId);
 			Assert.AreEqual(Input.CreatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.CreatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 			Assert.AreEqual(Input.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 		}
-		//Update
+
+		// Update 
 		[Test]
-		public async Task UnitOfMeasure_Update_ReturnTrue()
+		public async Task Service_Update_ReturnTrue()
 		{
 			// Create Instance
 			await repository.Create(Input);
 
 			// Update
-			var UpdateData = DataContext.UnitOfMeasure.SingleOrDefault(x => x.Id==Input.Id);
-			 Input = new UnitOfMeasure
+			var UpdateData = DataContext.Service.SingleOrDefault(x => x.Id == Input.Id);
+			Input = new Service
 			{
 				Id = UpdateData.Id,
-				Code = "THUNG",
-				Name = "Thùng",
+				Code = "Canvas",
+				Name = "Ao Canvas",
+				UnitOfMeasureId = 1,
+				Price = 500000,
 				StatusId = 1,
 				CreatedAt = UpdateData.CreatedAt,
 				UpdatedAt = DateTime.Now,
-				Used = true,
+				Used = false
 			};
 			await repository.Update(Input);
 
-			//Assert
-			var Output = DataContext.UnitOfMeasure.Find(Input.Id);
+			// Assert
+			var Output = DataContext.Service.SingleOrDefault(x => x.Id == Input.Id);
+			Assert.IsNotNull(Output);
 			Assert.AreEqual(Input.Code, Output.Code);
 			Assert.AreEqual(Input.Name, Output.Name);
+			Assert.AreEqual(Input.Price, Output.Price);
 			Assert.AreEqual(Input.StatusId, Output.StatusId);
-			Assert.AreEqual(Input.Used, Output.Used);
+			Assert.AreEqual(Input.UnitOfMeasureId, Output.UnitOfMeasureId);
 			Assert.AreEqual(Input.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"), Output.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss"));
 		}
-		//Delete
+
+		// Delete
 		[Test]
-		public async Task UnitOfMeasure_Delete_ReturnTrue()
+		public async Task Service_Delete_ReturnTrue()
 		{
 			// Create Instance
 			await repository.Create(Input);
@@ -115,36 +141,8 @@ namespace SampleProject.Tests
 			await repository.Delete(Input);
 			Initialize();
 			// Assert
-			var Output = DataContext.UnitOfMeasure.SingleOrDefault(x => x.Id == Input.Id);
+			var Output = DataContext.Service.Find(Input.Id);
 			Assert.IsNotNull(Output.DeletedAt);
 		}
-		
-		//List Order By Name + Skip and Take
-		//[Test]
-		public async Task UnitOfMeasure_GetListByName_ReturnTrue()
-		{
-			// Create Instance
-			await repository.Create(Input);
-			await repository.Create(Input);
-			await repository.Create(Input);
-
-			string Name = "Chiếc";
-
-			// Get List
-			UnitOfMeasureFilter UnitOfMeasureFilter = new UnitOfMeasureFilter
-			{
-				Skip = 0,
-				Take = 10,
-				Name = new StringFilter { Equal = Name },
-				Selects = UnitOfMeasureSelect.Name
-			};
-
-			//Assert
-			int count = await repository.Count(UnitOfMeasureFilter);
-			Assert.AreEqual(3, count);
-		}
-		//List Order By Type + Skip and Take
-
-		//Bulk Insert 
 	}
 }
