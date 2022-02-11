@@ -18,7 +18,7 @@ namespace SampleProject.Tests
 		protected ServiceProvider provider;
 		public CommonTests()
 		{}
-		public void Init()
+		public void Initialize()
 		{
 			_ = License.EfExtension;
 
