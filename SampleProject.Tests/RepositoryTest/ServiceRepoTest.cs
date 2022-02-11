@@ -17,7 +17,6 @@ namespace SampleProject.Tests.RepositoryTest
 	public class ServiceRepoTest: CommonTests
 	{
 		IServiceRepository repository;
-		IUOW uow;
 		Service Input;
 		public ServiceRepoTest(): base() {
 		}
@@ -25,9 +24,9 @@ namespace SampleProject.Tests.RepositoryTest
 		[SetUp]
 		public async Task Setup()
 		{
+			Initialize();
 			await Clean();
 			repository = new ServiceRepository(DataContext);
-			uow = new UOW(DataContext);
 
 			#region Setup Status + UnitOfMeasure
 			// Setup Status
@@ -79,14 +78,14 @@ namespace SampleProject.Tests.RepositoryTest
 		}
 
 		// Create 
-		//[Test]
+		[Test]
 		public async Task Service_Create_ReturnTrue()
 		{
 			// Create Instance
-			await uow.ServiceRepository.Create(Input);
+			await repository.Create(Input);
 
 			// Assert
-			var Output = DataContext.Service.SingleOrDefault(x=>x.Id == 1);
+			var Output = DataContext.Service.SingleOrDefault(x=>x.Id == Input.Id);
 			Assert.IsNotNull(Output);
 			Assert.AreEqual(Input.Code, Output.Code);
 			Assert.AreEqual(Input.Name, Output.Name);
@@ -98,14 +97,14 @@ namespace SampleProject.Tests.RepositoryTest
 		}
 
 		// Update 
-		//[Test]
+		[Test]
 		public async Task Service_Update_ReturnTrue()
 		{
 			// Create Instance
-			await uow.ServiceRepository.Create(Input);
+			await repository.Create(Input);
 
 			// Update
-			var UpdateData = DataContext.Service.SingleOrDefault(x => x.Id == 1);
+			var UpdateData = DataContext.Service.SingleOrDefault(x => x.Id == Input.Id);
 			Input = new Service
 			{
 				Id = UpdateData.Id,
@@ -118,10 +117,10 @@ namespace SampleProject.Tests.RepositoryTest
 				UpdatedAt = DateTime.Now,
 				Used = false
 			};
-			await uow.ServiceRepository.Update(Input);
+			await repository.Update(Input);
 
 			// Assert
-			var Output = DataContext.Service.SingleOrDefault(x => x.Id == 1);
+			var Output = DataContext.Service.SingleOrDefault(x => x.Id == Input.Id);
 			Assert.IsNotNull(Output);
 			Assert.AreEqual(Input.Code, Output.Code);
 			Assert.AreEqual(Input.Name, Output.Name);
@@ -139,27 +138,11 @@ namespace SampleProject.Tests.RepositoryTest
 			await repository.Create(Input);
 
 			// Delete
-			var DeleteData = DataContext.Service.SingleOrDefault(x => x.Id == 1);
-			await repository.Delete(ConvertDAOToEntity(DeleteData));
+			await repository.Delete(Input);
+			Initialize();
 			// Assert
-			var Output = await repository.Get(1);//DataContext.OrderService.SingleOrDefault(x => x.Id == 1);
+			var Output = DataContext.Service.Find(Input.Id);
 			Assert.IsNotNull(Output.DeletedAt);
-		}
-		public Service ConvertDAOToEntity(ServiceDAO ServiceDAO)
-		{
-			return new Service
-			{
-				Id = ServiceDAO.Id,
-				Code = ServiceDAO.Code,
-				Name = ServiceDAO.Name,
-				UnitOfMeasureId = ServiceDAO.UnitOfMeasureId,
-				Price = ServiceDAO.Price,
-				StatusId = ServiceDAO.StatusId,
-				CreatedAt = ServiceDAO.CreatedAt,
-				UpdatedAt = ServiceDAO.UpdatedAt,
-				DeletedAt = ServiceDAO.DeletedAt,
-				Used = ServiceDAO.Used,
-			};
 		}
 	}
 }
