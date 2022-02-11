@@ -30,6 +30,7 @@ namespace SampleProject.Tests.RepositoryTest
 		[SetUp]
 		public async Task Setup()
 		{
+			Initialize();
 			await Clean();
 			repository = new CustomerRepository(DataContext);
 			//Business Group
@@ -62,14 +63,14 @@ namespace SampleProject.Tests.RepositoryTest
 		}
 		
 		// Create
-		//[Test]
+		[Test]
 		public async Task Customer_Create_ReturnTrue()
 		{
 			// Create Instance
 			await repository.Create(Input);
 
 			// Assert
-			var Output = DataContext.Customer.Where(x => x.Id == 1).FirstOrDefault();
+			var Output = DataContext.Customer.Find(Input.Id);
 			Assert.AreEqual(Input.Code, Output.Code);
 			Assert.AreEqual(Input.Name, Output.Name);
 			Assert.AreEqual(Input.Address, Output.Address);
@@ -81,14 +82,14 @@ namespace SampleProject.Tests.RepositoryTest
 		}
 
 		// Update
-		//[Test]
+		[Test]
 		public async Task Customer_Update_ReturnTrue()
 		{
 			// Create Instance
 			await repository.Create(Input);
 
 			// Update
-			var UpdateData = DataContext.Customer.SingleOrDefault(x => x.Code == Input.Code);
+			var UpdateData = DataContext.Customer.Find(Input.Id); ;
 			Input = new Customer
 			{
 				Id = UpdateData.Id,
@@ -103,7 +104,7 @@ namespace SampleProject.Tests.RepositoryTest
 			};
 			await repository.Update(Input);
 			// Assert
-			var Output = DataContext.Customer.Where(x => x.Id == Input.Id).FirstOrDefault();
+			var Output = DataContext.Customer.Find(Input.Id);
 			Assert.AreEqual(Input.Code, Output.Code);
 			Assert.AreEqual(Input.Name, Output.Name);
 			Assert.AreEqual(Input.Address, Output.Address);
@@ -121,30 +122,14 @@ namespace SampleProject.Tests.RepositoryTest
 			await repository.Create(Input);
 
 			// Delete
-			var DeleteData = DataContext.Customer.SingleOrDefault(x => x.Id == 1);
-			await repository.Delete(ConvertDAOToEntity(DeleteData));
+			await repository.Delete(Input);
+			Initialize();
 			// Assert
-			var Output = await repository.Get(1);//DataContext.OrderService.SingleOrDefault(x => x.Id == 1);
+			var Output = DataContext.Customer.Find(Input.Id);
 			Assert.IsNotNull(Output.DeletedAt);
 		}
-		public Customer ConvertDAOToEntity(CustomerDAO CustomerDAO)
-		{
-			return new Customer
-			{
-				Id = CustomerDAO.Id,
-				Code = CustomerDAO.Code,
-				Name = CustomerDAO.Name,
-				Phone = CustomerDAO.Phone,
-				Address = CustomerDAO.Address,
-				StatusId = CustomerDAO.StatusId,
-				CreatedAt = CustomerDAO.CreatedAt,
-				UpdatedAt = CustomerDAO.UpdatedAt,
-				DeletedAt = CustomerDAO.DeletedAt,
-				Used = CustomerDAO.Used,
-			};
-		}
 		//List Order By Name + Skip and Take
-		//[Test]
+		[Test]
 		public async Task Customer_GetListByName_ReturnTrue()
 		{
 			// Create Instance
@@ -167,7 +152,7 @@ namespace SampleProject.Tests.RepositoryTest
 		}
 
 		// Bulk Insert
-		//[Test]
+		[Test]
 		public async Task Customer_BulkInsert_ReturnTrue()
 		{
 			List<Customer> Customers = new List<Customer>();
