@@ -154,9 +154,6 @@ namespace SampleProject.Rpc.customer
 		private CustomerFilter ConvertFilterDTOToFilterEntity(Customer_CustomerFilterDTO Customer_CustomerFilterDTO)
 		{
 			CustomerFilter CustomerFilter = new CustomerFilter();
-			//ProductFilter.Selects = ProductSelect.Code | ProductSelect.Name
-			//    | ProductSelect.Id | ProductSelect.ProductProductGroupingMapping | ProductSelect.ProductType
-			//    | ProductSelect.Status | ProductSelect.UsedVariation | ProductSelect.Category | ProductSelect.Brand;
 			CustomerFilter.Selects = CustomerSelect.ALL;
 			CustomerFilter.Skip = Customer_CustomerFilterDTO.Skip;
 			CustomerFilter.Take = Customer_CustomerFilterDTO.Take;
