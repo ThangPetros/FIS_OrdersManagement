@@ -1,4 +1,4 @@
-﻿namespace SampleProject.Rpc.Customer
+﻿namespace SampleProject.Rpc.customer
 {
     public class CustomerRoute : Root
     {
