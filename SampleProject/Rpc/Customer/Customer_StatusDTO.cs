@@ -1,7 +1,7 @@
 ﻿using SampleProject.Entities;
 using TrueSight.Common;
 
-namespace SampleProject.Rpc.Customer
+namespace SampleProject.Rpc.customer
 {
     public class Customer_StatusDTO : DataDTO
     {
