@@ -24,8 +24,6 @@
     <Folder Include="Resources\vi\" />
     <Folder Include="Rpc\order-service-content\" />
     <Folder Include="Rpc\order-service\" />
-    <Folder Include="Rpc\unit-of-meassure\" />
-    <Folder Include="Rpc\service\" />
   </ItemGroup>
 
   <ItemGroup>
