@@ -26,24 +26,24 @@ namespace SampleProject.Services.MUnitOfMeasure
       public class UnitOfMeasureService : IUnitOfMeasureService
       {
             private IUOW UOW;
-            private ILogging Logging;
+            //private ILogging Logging;
             private ICurrentContext CurrentContext;
             private IUnitOfMeasureValidator UnitOfMeasureValidator;
-            private IRabbitManager RabbitManager;
+            //private IRabbitManager RabbitManager;
 
             public UnitOfMeasureService(
                 IUOW UOW,
-                ILogging Logging,
+                //ILogging Logging,
                 ICurrentContext CurrentContext,
-                IUnitOfMeasureValidator UnitOfMeasureValidator,
-                IRabbitManager RabbitManager
+                IUnitOfMeasureValidator UnitOfMeasureValidator
+                //IRabbitManager RabbitManager
             )
             {
                   this.UOW = UOW;
-                  this.Logging = Logging;
+                  //this.Logging = Logging;
                   this.CurrentContext = CurrentContext;
                   this.UnitOfMeasureValidator = UnitOfMeasureValidator;
-                  this.RabbitManager = RabbitManager;
+                  //this.RabbitManager = RabbitManager;
             }
             public async Task<int> Count(UnitOfMeasureFilter UnitOfMeasureFilter)
             {
@@ -54,7 +54,8 @@ namespace SampleProject.Services.MUnitOfMeasure
                   }
                   catch (Exception ex)
                   {
-                        Logging.CreateSystemLog(ex, nameof(UnitOfMeasureService));
+				Console.WriteLine(ex.Message);
+                        //Logging.CreateSystemLog(ex, nameof(UnitOfMeasureService));
                   }
                   return 0;
             }
@@ -68,7 +69,8 @@ namespace SampleProject.Services.MUnitOfMeasure
                   }
                   catch (Exception ex)
                   {
-                        Logging.CreateSystemLog(ex, nameof(UnitOfMeasureService));
+				Console.WriteLine(ex.Message);
+                        //Logging.CreateSystemLog(ex, nameof(UnitOfMeasureService));
                   }
                   return null;
             }
@@ -88,14 +90,15 @@ namespace SampleProject.Services.MUnitOfMeasure
                   {
                         await UOW.UnitOfMeasureRepository.Create(UnitOfMeasure);
                         List<UnitOfMeasure> UnitOfMeasures = await UOW.UnitOfMeasureRepository.List(new List<long> { UnitOfMeasure.Id });
-                        Sync(UnitOfMeasures);
+                        //Sync(UnitOfMeasures);
                         UnitOfMeasure = UnitOfMeasures.FirstOrDefault();
-                        Logging.CreateAuditLog(UnitOfMeasure, new { }, nameof(UnitOfMeasureService));
+                        //Logging.CreateAuditLog(UnitOfMeasure, new { }, nameof(UnitOfMeasureService));
                         return await UOW.UnitOfMeasureRepository.Get(UnitOfMeasure.Id);
                   }
                   catch (Exception ex)
                   {
-                        Logging.CreateSystemLog(ex, nameof(UnitOfMeasureService));
+				Console.WriteLine(ex.Message);
+                        //Logging.CreateSystemLog(ex, nameof(UnitOfMeasureService));
                   }
                   return null;
             }
@@ -109,14 +112,15 @@ namespace SampleProject.Services.MUnitOfMeasure
                         var oldData = await UOW.UnitOfMeasureRepository.Get(UnitOfMeasure.Id);
                         await UOW.UnitOfMeasureRepository.Update(UnitOfMeasure);
                         List<UnitOfMeasure> UnitOfMeasures = await UOW.UnitOfMeasureRepository.List(new List<long> { UnitOfMeasure.Id });
-                        Sync(UnitOfMeasures);
+                        //Sync(UnitOfMeasures);
                         UnitOfMeasure = UnitOfMeasures.FirstOrDefault();
-                        Logging.CreateAuditLog(UnitOfMeasure, oldData, nameof(UnitOfMeasureService));
+                        //Logging.CreateAuditLog(UnitOfMeasure, oldData, nameof(UnitOfMeasureService));
                         return UnitOfMeasure;
                   }
                   catch (Exception ex)
                   {
-                        Logging.CreateSystemLog(ex, nameof(UnitOfMeasureService));
+				Console.WriteLine(ex.Message);
+                        //Logging.CreateSystemLog(ex, nameof(UnitOfMeasureService));
                   }
                   return null;
             }
@@ -128,18 +132,18 @@ namespace SampleProject.Services.MUnitOfMeasure
 
                   try
                   {
-
                         await UOW.UnitOfMeasureRepository.Delete(UnitOfMeasure);
 
                         List<UnitOfMeasure> UnitOfMeasures = await UOW.UnitOfMeasureRepository.List(new List<long> { UnitOfMeasure.Id });
-                        Sync(UnitOfMeasures);
+                        //Sync(UnitOfMeasures);
                         UnitOfMeasure = UnitOfMeasures.FirstOrDefault();
-                        Logging.CreateAuditLog(new { }, UnitOfMeasure, nameof(UnitOfMeasureService));
+                        //Logging.CreateAuditLog(new { }, UnitOfMeasure, nameof(UnitOfMeasureService));
                         return UnitOfMeasure;
                   }
                   catch (Exception ex)
                   {
-                        Logging.CreateSystemLog(ex, nameof(UnitOfMeasureService));
+                        Console.WriteLine(ex.Message);
+                        //Logging.CreateSystemLog(ex, nameof(UnitOfMeasureService));
                   }
                   return null;
             }
@@ -151,18 +155,18 @@ namespace SampleProject.Services.MUnitOfMeasure
 
                   try
                   {
-
                         await UOW.UnitOfMeasureRepository.BulkDelete(UnitOfMeasures);
 
                         List<long> Ids = UnitOfMeasures.Select(x => x.Id).ToList();
                         UnitOfMeasures = await UOW.UnitOfMeasureRepository.List(Ids);
-                        Sync(UnitOfMeasures);
-                        Logging.CreateAuditLog(new { }, UnitOfMeasures, nameof(UnitOfMeasureService));
+                        //Sync(UnitOfMeasures);
+                        //Logging.CreateAuditLog(new { }, UnitOfMeasures, nameof(UnitOfMeasureService));
                         return UnitOfMeasures;
                   }
                   catch (Exception ex)
                   {
-                        Logging.CreateSystemLog(ex, nameof(UnitOfMeasureService));
+				Console.WriteLine(ex.Message);
+                        //Logging.CreateSystemLog(ex, nameof(UnitOfMeasureService));
                   }
                   return null;
             }
@@ -190,20 +194,21 @@ namespace SampleProject.Services.MUnitOfMeasure
 
                         List<long> Ids = UnitOfMeasures.Select(x => x.Id).ToList();
                         UnitOfMeasures = await UOW.UnitOfMeasureRepository.List(Ids);
-                        Sync(UnitOfMeasures);
-                        Logging.CreateAuditLog(UnitOfMeasures, new { }, nameof(UnitOfMeasureService));
+                        //Sync(UnitOfMeasures);
+                        //Logging.CreateAuditLog(UnitOfMeasures, new { }, nameof(UnitOfMeasureService));
                         return UnitOfMeasures;
                   }
                   catch (Exception ex)
                   {
-                        Logging.CreateSystemLog(ex, nameof(UnitOfMeasureService));
+				Console.WriteLine(ex.Message);
+                        //Logging.CreateSystemLog(ex, nameof(UnitOfMeasureService));
                   }
                   return null;
             }
 
-            private void Sync(List<UnitOfMeasure> UnitOfMeasures)
+            /*private void Sync(List<UnitOfMeasure> UnitOfMeasures)
             {
                   RabbitManager.PublishList(UnitOfMeasures, RoutingKeyEnum.UnitOfMeasureSync.Code);
-            }
+            }*/
       }
 }

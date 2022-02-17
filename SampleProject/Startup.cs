@@ -42,25 +42,25 @@ namespace SampleProject
             // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
             public void ConfigureServices(IServiceCollection services)
             {
-                  //services.AddControllers();
-                  _ = DataEntity.InformationResource;
-                  _ = DataEntity.WarningResource;
-                  _ = DataEntity.ErrorResource;
-                  services.AddControllers().AddNewtonsoftJson(
-                      options =>
-                      {
-                            options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
-                            options.SerializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;
-                            options.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
-                            options.SerializerSettings.DateFormatString = "yyyy-MM-ddTHH:mm:ss.fffK";
-                      });
+			services.AddControllers();
+			/*  _ = DataEntity.InformationResource;
+			  _ = DataEntity.WarningResource;
+			  _ = DataEntity.ErrorResource;
+			  services.AddControllers().AddNewtonsoftJson(
+				options =>
+				{
+					options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+					options.SerializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;
+					options.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+					options.SerializerSettings.DateFormatString = "yyyy-MM-ddTHH:mm:ss.fffK";
+				});*/
 
-                  //services.AddSingleton<IRedisStore, RedisStore>();
-                  services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
-                  services.AddSingleton<IPooledObjectPolicy<IModel>, RabbitModelPooledObjectPolicy>();
-                  services.AddSingleton<IRabbitManager, RabbitManager>();
-                  services.AddHostedService<ConsumeRabbitMQHostedService>();
-                  services.AddDbContext<DataContext>(options =>
+			//services.AddSingleton<IRedisStore, RedisStore>();
+			//services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
+			//services.AddSingleton<IPooledObjectPolicy<IModel>, RabbitModelPooledObjectPolicy>();
+			//services.AddSingleton<IRabbitManager, RabbitManager>();
+			//services.AddHostedService<ConsumeRabbitMQHostedService>();
+			services.AddDbContext<DataContext>(options =>
                    options.UseSqlServer(Configuration.GetConnectionString("DataContext"), sqlOptions =>
                    {
                          sqlOptions.AddTempTableSupport();

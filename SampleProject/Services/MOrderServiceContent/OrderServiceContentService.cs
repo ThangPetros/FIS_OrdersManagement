@@ -23,24 +23,24 @@ namespace SampleProject.Services.MOrderServiceContent
 	public class ResourceService : IOrderServiceContentService
 	{
 		private IUOW UOW;
-		private ILogging Logging;
+		//private ILogging Logging;
 		private ICurrentContext CurrentContext;
 		private IOrderServiceContentValidator OrderServiceContentValidator;
-		private IRabbitManager RabbitManager;
+		//private IRabbitManager RabbitManager;
 
 		public ResourceService(
 		    IUOW UOW,
-		    ILogging Logging,
+		    //ILogging Logging,
 		    ICurrentContext CurrentContext,
-		    IOrderServiceContentValidator OrderServiceContentValidator,
-		    IRabbitManager RabbitManager
+		    IOrderServiceContentValidator OrderServiceContentValidator
+		    //IRabbitManager RabbitManager
 		)
 		{
 			this.UOW = UOW;
-			this.Logging = Logging;
+			//this.Logging = Logging;
 			this.CurrentContext = CurrentContext;
 			this.OrderServiceContentValidator = OrderServiceContentValidator;
-			this.RabbitManager = RabbitManager;
+			//this.RabbitManager = RabbitManager;
 		}
 		public async Task<int> Count(OrderServiceContentFilter OrderServiceContentFilter)
 		{
@@ -51,7 +51,8 @@ namespace SampleProject.Services.MOrderServiceContent
 			}
 			catch (Exception ex)
 			{
-				Logging.CreateSystemLog(ex, nameof(ResourceService));
+				Console.WriteLine(ex.Message);
+				//Logging.CreateSystemLog(ex, nameof(ResourceService));
 			}
 			return 0;
 		}
@@ -65,7 +66,8 @@ namespace SampleProject.Services.MOrderServiceContent
 			}
 			catch (Exception ex)
 			{
-				Logging.CreateSystemLog(ex, nameof(ResourceService));
+				Console.WriteLine(ex.Message);
+				//Logging.CreateSystemLog(ex, nameof(ResourceService));
 			}
 			return null;
 		}
@@ -87,14 +89,15 @@ namespace SampleProject.Services.MOrderServiceContent
 				await UOW.OrderServiceContentRepository.Create(OrderServiceContent);
 				List<OrderServiceContent> OrderServiceContents = await UOW.OrderServiceContentRepository.List(new List<long> { OrderServiceContent.Id });
 
-				Sync(OrderServiceContents);
+				//Sync(OrderServiceContents);
 				OrderServiceContent = OrderServiceContents.FirstOrDefault();
-				Logging.CreateAuditLog(OrderServiceContent, new { }, nameof(ResourceService));
+				//Logging.CreateAuditLog(OrderServiceContent, new { }, nameof(ResourceService));
 				return OrderServiceContent;
 			}
 			catch (Exception ex)
 			{
-				Logging.CreateSystemLog(ex, nameof(ResourceService));
+				Console.WriteLine(ex.Message);
+				//Logging.CreateSystemLog(ex, nameof(ResourceService));
 			}
 			return null;
 		}
@@ -108,22 +111,23 @@ namespace SampleProject.Services.MOrderServiceContent
 				var oldData = await UOW.OrderServiceContentRepository.Get(OrderServiceContent.Id);
 				await UOW.OrderServiceContentRepository.Update(OrderServiceContent);
 				List<OrderServiceContent> OrderServiceContents = await UOW.OrderServiceContentRepository.List(new List<long> { OrderServiceContent.Id });
-				Sync(OrderServiceContents);
+				//Sync(OrderServiceContents);
 				OrderServiceContent = OrderServiceContents.FirstOrDefault();
 
-				Logging.CreateAuditLog(OrderServiceContent, oldData, nameof(ResourceService));
+				//Logging.CreateAuditLog(OrderServiceContent, oldData, nameof(ResourceService));
 				return OrderServiceContent;
 			}
 			catch (Exception ex)
 			{
-				Logging.CreateSystemLog(ex, nameof(ResourceService));
+				Console.WriteLine(ex.Message);
+				//Logging.CreateSystemLog(ex, nameof(ResourceService));
 			}
 			return null;
 		}
 
-		private void Sync(List<OrderServiceContent> OrderServiceContents)
+		/*private void Sync(List<OrderServiceContent> OrderServiceContents)
 		{
 			RabbitManager.PublishList(OrderServiceContents, RoutingKeyEnum.ServiceSync.Code);
-		}
+		}*/
 	}
 }
