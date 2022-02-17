@@ -102,21 +102,21 @@ namespace SampleProject.Rpc.service
 		}
 
 		[Route(ServiceRoute.Delete), HttpPost]
-		public async Task<ActionResult<Service_ServiceDTO>> Delete([FromBody] Service_ServiceDTO Customer_CustomerDTO)
+		public async Task<ActionResult<Service_ServiceDTO>> Delete([FromBody] Service_ServiceDTO Service_ServiceDTO)
 		{
 			if (!ModelState.IsValid)
 				throw new BindException(ModelState);
 
-			if (!await HasPermission(Customer_CustomerDTO.Id))
+			if (!await HasPermission(Service_ServiceDTO.Id))
 				return Forbid();
-			Service Service = ConvertDTOToEntity(Customer_CustomerDTO);
+			Service Service = ConvertDTOToEntity(Service_ServiceDTO);
 
 			Service = await ServiceService.Delete(Service);
-			Customer_CustomerDTO = new Service_ServiceDTO(Service);
+			Service_ServiceDTO = new Service_ServiceDTO(Service);
 			if (Service.IsValidated)
-				return Customer_CustomerDTO;
+				return Service_ServiceDTO;
 			else
-				return BadRequest(Customer_CustomerDTO);
+				return BadRequest(Service_ServiceDTO);
 		}
 		private async Task<bool> HasPermission(long Id)
 		{
