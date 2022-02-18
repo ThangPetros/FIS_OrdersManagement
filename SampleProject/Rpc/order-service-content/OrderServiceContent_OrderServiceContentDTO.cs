@@ -1,5 +1,6 @@
 ﻿using SampleProject.Entities;
 using System;
+using System.Collections.Generic;
 using TrueSight.Common;
 
 namespace SampleProject.Rpc.order_service_content
