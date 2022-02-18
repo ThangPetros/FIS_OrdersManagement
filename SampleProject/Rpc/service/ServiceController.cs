@@ -153,7 +153,7 @@ namespace SampleProject.Rpc.service
 			{
 				Id = Service_ServiceDTO.UnitOfMeasure.Id,
 				Code = Service_ServiceDTO.UnitOfMeasure.Code,
-				Name = Service_ServiceDTO.Status.Name,
+				Name = Service_ServiceDTO.UnitOfMeasure.Name,
 				StatusId = Service_ServiceDTO.UnitOfMeasure.StatusId
 			};
 
