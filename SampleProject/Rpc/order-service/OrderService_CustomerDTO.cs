@@ -1,11 +1,12 @@
 ﻿using SampleProject.Entities;
-using SampleProject.Common;
+using SampleProject.Rpc.customer;
 using System;
+using System.Collections.Generic;
 using TrueSight.Common;
 
-namespace SampleProject.Rpc.customer
+namespace SampleProject.Rpc.order_service
 {
-	public class Customer_CustomerDTO : DataDTO
+	public class OrderService_CustomerDTO:DataDTO
 	{
 		public long Id { get; set; }
 		public string Code { get; set; }
@@ -17,22 +18,23 @@ namespace SampleProject.Rpc.customer
 		public DateTime CreatedAt { get; set; }
 		public DateTime UpdateAt { get; set; }
 		public Customer_StatusDTO Status { get; set; }
-		public Customer_CustomerDTO() { }
-		public Customer_CustomerDTO(Customer Customer)
-		{
+
+		public OrderService_CustomerDTO() { }
+		public OrderService_CustomerDTO(Customer Customer) {
 			this.Id = Customer.Id;
 			this.Code = Customer.Code;
 			this.Name = Customer.Name;
-			this.Phone = Customer.Phone;
 			this.Address = Customer.Address;
-			this.Status = Customer.Status == null ? null : new Customer_StatusDTO(Customer.Status);
+			this.Phone = Customer.Phone;
+			this.StatusId = Customer.StatusId;
 			this.Used = Customer.Used;
 			this.CreatedAt = Customer.CreatedAt;
 			this.UpdateAt = Customer.UpdatedAt;
+			this.Status = Customer.Status == null ? null : new Customer_StatusDTO(Customer.Status);
 			this.Errors = Customer.Errors;
 		}
 	}
-	public class Customer_CustomerFilterDTO : FilterDTO
+	public class OrderService_CustomerFilterDTO : FilterDTO
 	{
 		public IdFilter Id { get; set; }
 		public StringFilter Code { get; set; }
@@ -41,7 +43,8 @@ namespace SampleProject.Rpc.customer
 		public StringFilter Address { get; set; }
 		public IdFilter StatusId { get; set; }
 		public DateFilter UpdateTime { get; set; }
+		public List<CustomerFilter> OrFilter { get; set; }
 		public CustomerOrder OrderBy { get; set; }
-		//public CustomerSelect Selects { get; set; }
+		public CustomerSelect Selects { get; set; }
 	}
 }

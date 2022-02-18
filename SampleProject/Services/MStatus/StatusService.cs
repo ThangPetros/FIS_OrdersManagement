@@ -18,12 +18,12 @@ namespace SampleProject.Services.MStatus
 	public class StatusService : IStatusService //BaseService, 
 	{
 		private IUOW UOW;
-		private ILogging Logging;
+		//private ILogging Logging;
 		private ICurrentContext CurrentContext;
 
 		public StatusService(
 		    IUOW UOW,
-		    ILogging Logging,
+		    //ILogging Logging,
 		    ICurrentContext CurrentContext
 		)
 		{
@@ -40,7 +40,8 @@ namespace SampleProject.Services.MStatus
 			}
 			catch (Exception ex)
 			{
-				Logging.CreateSystemLog(ex, nameof(StatusService));
+				Console.WriteLine(ex.Message);
+				//Logging.CreateSystemLog(ex, nameof(StatusService));
 			}
 			return 0;
 		}
@@ -54,7 +55,8 @@ namespace SampleProject.Services.MStatus
 			}
 			catch (Exception ex)
 			{
-				Logging.CreateSystemLog(ex, nameof(StatusService));
+				Console.WriteLine(ex.Message);
+				//Logging.CreateSystemLog(ex, nameof(StatusService));
 			}
 			return null;
 		}

@@ -20,30 +20,30 @@ namespace SampleProject.Services.MCustomer
 		Task<Customer> Update(Customer Customer);
 		Task<Customer> Delete(Customer Customer);
 		//Task<List<Customer>> BulkDelete(List<Customer> Customers);
-		Task<List<Customer>> BulkMerge(List<Customer> Customers);
+		//Task<List<Customer>> BulkMerge(List<Customer> Customers);
 		//Task<List<Customer>> Import(List<Customer> Customers);
 	}
 	public class ResourceService : ICustomerService
 	{
 		private IUOW UOW;
-		private ILogging Logging;
+		//private ILogging Logging;
 		private ICurrentContext CurrentContext;
 		private ICustomerValidator CustomerValidator;
-		private IRabbitManager RabbitManager;
+		//private IRabbitManager RabbitManager;
 
 		public ResourceService(
 		    IUOW UOW,
-		    ILogging Logging,
+		    //ILogging Logging,
 		    ICurrentContext CurrentContext,
-		    ICustomerValidator CustomerValidator,
-		    IRabbitManager RabbitManager
+		    ICustomerValidator CustomerValidator
+		    //IRabbitManager RabbitManager
 		)
 		{
 			this.UOW = UOW;
-			this.Logging = Logging;
+			//this.Logging = Logging;
 			this.CurrentContext = CurrentContext;
 			this.CustomerValidator = CustomerValidator;
-			this.RabbitManager = RabbitManager;
+			//this.RabbitManager = RabbitManager;
 		}
 		public async Task<int> Count(CustomerFilter CustomerFilter)
 		{
@@ -54,7 +54,8 @@ namespace SampleProject.Services.MCustomer
 			}
 			catch (Exception ex)
 			{
-				Logging.CreateSystemLog(ex, nameof(ResourceService));
+				Console.WriteLine(ex.Message);
+				//Logging.CreateSystemLog(ex, nameof(ResourceService));
 			}
 			return 0;
 		}
@@ -68,7 +69,8 @@ namespace SampleProject.Services.MCustomer
 			}
 			catch (Exception ex)
 			{
-				Logging.CreateSystemLog(ex, nameof(ResourceService));
+				Console.WriteLine(ex.Message);
+				//Logging.CreateSystemLog(ex, nameof(ResourceService));
 			}
 			return null;
 		}
@@ -90,14 +92,15 @@ namespace SampleProject.Services.MCustomer
 				await UOW.CustomerRepository.Create(Customer);
 				List<Customer> Customers = await UOW.CustomerRepository.List(new List<long> { Customer.Id });
 
-				Sync(Customers);
+				//Sync(Customers);
 				Customer = Customers.FirstOrDefault();
-				Logging.CreateAuditLog(Customer, new { }, nameof(ResourceService));
+				//Logging.CreateAuditLog(Customer, new { }, nameof(ResourceService));
 				return Customer;
 			}
 			catch (Exception ex)
 			{
-				Logging.CreateSystemLog(ex, nameof(ResourceService));
+				Console.WriteLine(ex.Message);
+				//Logging.CreateSystemLog(ex, nameof(ResourceService));
 			}
 			return null;
 		}
@@ -111,15 +114,16 @@ namespace SampleProject.Services.MCustomer
 				var oldData = await UOW.CustomerRepository.Get(Customer.Id);
 				await UOW.CustomerRepository.Update(Customer);
 				List<Customer> Customers = await UOW.CustomerRepository.List(new List<long> { Customer.Id });
-				Sync(Customers);
+				//Sync(Customers);
 				Customer = Customers.FirstOrDefault();
 
-				Logging.CreateAuditLog(Customer, oldData, nameof(ResourceService));
+				//Logging.CreateAuditLog(Customer, oldData, nameof(ResourceService));
 				return Customer;
 			}
 			catch (Exception ex)
 			{
-				Logging.CreateSystemLog(ex, nameof(ResourceService));
+				Console.WriteLine(ex.Message);
+				//Logging.CreateSystemLog(ex, nameof(ResourceService));
 			}
 			return null;
 		}
@@ -133,14 +137,15 @@ namespace SampleProject.Services.MCustomer
 			{
 				await UOW.CustomerRepository.Delete(Customer);
 				List<Customer> Customers = await UOW.CustomerRepository.List(new List<long> { Customer.Id });
-				Sync(Customers);
+				//Sync(Customers);
 				Customer = Customers.FirstOrDefault();
-				Logging.CreateAuditLog(new { }, Customer, nameof(ResourceService));
+				//Logging.CreateAuditLog(new { }, Customer, nameof(ResourceService));
 				return Customer;
 			}
 			catch (Exception ex)
 			{
-				Logging.CreateSystemLog(ex, nameof(ResourceService));
+				Console.WriteLine(ex.Message);
+				//Logging.CreateSystemLog(ex, nameof(ResourceService));
 			}
 			return null;
 		}
@@ -169,7 +174,7 @@ namespace SampleProject.Services.MCustomer
 		}*/ 
 		#endregion
 
-		public async Task<List<Customer>> BulkMerge(List<Customer> Customers)
+		/*public async Task<List<Customer>> BulkMerge(List<Customer> Customers)
 		{
 			if (!await CustomerValidator.BulkMerge(Customers))
 				return Customers;
@@ -178,16 +183,17 @@ namespace SampleProject.Services.MCustomer
 				await UOW.CustomerRepository.BulkMerge(Customers);
 				List<long> Ids = Customers.Select(x => x.Id).ToList();
 				Customers = await UOW.CustomerRepository.List(Ids);
-				Sync(Customers);
-				Logging.CreateAuditLog(Customers, new { }, nameof(ResourceService));
+				//Sync(Customers);
+				//Logging.CreateAuditLog(Customers, new { }, nameof(ResourceService));
 				return Customers;
 			}
 			catch (Exception ex)
 			{
-				Logging.CreateSystemLog(ex, nameof(ResourceService));
+				Console.WriteLine(ex.Message);
+				//Logging.CreateSystemLog(ex, nameof(ResourceService));
 			}
 			return null;
-		}
+		}*/
 
 		#region Import
 		/*public async Task<List<Customer>> Import(List<Customer> Customers)
@@ -213,13 +219,13 @@ namespace SampleProject.Services.MCustomer
 		}*/ 
 		#endregion
 
-		private void Sync(List<Customer> Customers)
+		/*private void Sync(List<Customer> Customers)
 		{
-			/*foreach (var Customer in Customers)
+			*//*foreach (var Customer in Customers)
 			{
 				Customer.AppUserId = CurrentContext.UserId;
-			}*/
+			}*//*
 			RabbitManager.PublishList(Customers, RoutingKeyEnum.CustomerSync.Code);
-		}
+		}*/
 	}
 }

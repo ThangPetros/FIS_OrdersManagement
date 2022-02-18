@@ -23,10 +23,10 @@ namespace SampleProject.Entities
 		public DateTime CreatedAt { get; set; }
 		public DateTime UpdatedAt { get; set; }
 
-		public virtual OrderServiceDAO OrderService { get; set; }
-            public virtual UnitOfMeasureDAO PrimaryUnitOfMeasure { get; set; }
-            public virtual ServiceDAO Service { get; set; }
-            public virtual UnitOfMeasureDAO UnitOfMeasure { get; set; }
+		public virtual OrderService OrderService { get; set; }
+            public virtual UnitOfMeasure PrimaryUnitOfMeasure { get; set; }
+            public virtual Service Service { get; set; }
+            public virtual UnitOfMeasure UnitOfMeasure { get; set; }
             public bool Equals(OrderServiceContent other)
 		{
 			return other != null && ServiceId == other.ServiceId && OrderServiceId == other.OrderServiceId && PrimaryUnitOfMeasureId == other.PrimaryUnitOfMeasureId && UnitOfMeasureId == other.UnitOfMeasureId;

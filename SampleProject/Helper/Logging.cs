@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿/*using Newtonsoft.Json;
 using SampleProject.Common;
 using SampleProject.Enums;
 using SampleProject.Entities;
@@ -57,3 +57,4 @@ namespace SampleProject.Helper
             }
       }
 }
+*/
