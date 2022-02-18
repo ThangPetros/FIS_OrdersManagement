@@ -22,7 +22,6 @@
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="Resources\vi\" />
-    <Folder Include="Rpc\order-service-content\" />
   </ItemGroup>
 
   <ItemGroup>
